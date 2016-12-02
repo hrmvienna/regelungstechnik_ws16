@@ -120,6 +120,7 @@ y = C*x + D*u;
 lambda = eig(A)
 
 % Eigenewrte l1,2 = -(c +/- (c^2 - 4*k*m)^(1/2))/(2*m)
+% c, k, m > 0: Auswirkung auf die Stabilitaet? TODO (z.B. wenn c^2 < 4*k*m,
 % dann ist der realteil fix negativ (-c/2m)
 lambda
 l1 = lambda(1); % = -0.5 + 1.3229 i = -0.5 + sqrt(-7)/2
@@ -155,8 +156,10 @@ sys = ss(A,B,C,D)
 
 
 
+% Allgemeine Loesung
 sa = dsolve('D2s = -(2/1)*s - (1/1)*Ds +1')
 
+% partikulaere Loesung
 sp = dsolve('D2s = -(2/1)*s - (1/1)*Ds + 1','s(0)=0', 'Ds(0)=0')
 
 
