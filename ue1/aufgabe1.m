@@ -309,3 +309,27 @@ legend(leg_y1, leg_y2, leg_y3,'Location', 'SouthEast')
 
 
 % System um die Ruhelage xr = ur = 0 linearisieren
+% Am Zettel
+
+
+%%
+% ===========
+% Aufgabe 1.4:
+% ===========
+
+%% 
+clear all;close all;clc;
+
+syms Ue Us Ua Uc1 Uc2 R1 R2 R3 K
+
+% Idealer nichtinvertierender Operationsverstärker
+% Allgemein: Ua = (1 + R2/R1) * Ue => Ua = V*Ue
+% hier: V = 1 + ((K-1)*R3)/R3 = 1 + K - 1 = K
+
+% Ua = K * Uc2
+
+x = [Uc1; Uc2];
+u = Ue;
+d = Us;
+y = Ua;
+
