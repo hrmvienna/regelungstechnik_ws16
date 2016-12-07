@@ -13,7 +13,7 @@ function x = int_euler_1_2(A, B, u, x0, Ta, Te)
     %gewuenschten Position (in unserem Fall length(trange)) mit der 
     %Schrittweite Ta iteriert.
     x=x0(:,1);             % : means, that all elements in the row are selected
-    for k=2:length(trange)      %length...returns the number of elements...
-        x(:,k) = x(:,k-1)+Ta*(A*x(:,k-1)+B*u(k-1)); 
+    for k=1:length(trange)-1      %length...returns the number of elements...
+        x(:,k+1) = x(:,k)+Ta*(A*x(:,k)+B*u(k)); 
     end
 end

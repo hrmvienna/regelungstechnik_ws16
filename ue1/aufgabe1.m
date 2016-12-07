@@ -58,21 +58,23 @@ clear all;close all;clc;
 % f(x,y,t) = sin(x*pi/10)*sin(y*pi/10)*|sin(t)|
 step_size = 0.2;
 range = 0:step_size:10;
-times = [0.1, 0.5, 1, 2, 10, 32];
+%times = [0.1, 0.5, 1, 2, 10, 32];
+times = 0.1:0.1:10;
 
 [xx,yy] = meshgrid(range,range); % Koordinatenmatrix erzeugen
 figure
-for t = times
 
+for t = times
     zz = sin((xx*pi)/10).*sin((yy*pi)/10).*abs(sin(t));
 
     % Gitterplot
     mesh(xx,yy,zz)
     box on
     grid on
+    zlim([0,1])
     
     suptitle(['t = ', num2str(t)]);
-    pause()
+    pause(0.1)
 end
 
 %%
@@ -114,7 +116,7 @@ y = C*x + D*u;
 % Eigenwerte
 lambda = eig(A)
 
-% Eigenewrte l1,2 = -(c +/- (c^2 - 4*k*m)^(1/2))/(2*m)
+% Eigenewrte l1,2 = -(c +/- sqrt(c^2 - 4*k*m)/(2*m)
 % c, k, m > 0: Auswirkung auf die Stabilitaet? TODO (z.B. wenn c^2 < 4*k*m,
 % dann ist der realteil fix negativ (-c/2m)
 lambda
@@ -204,7 +206,7 @@ s_eulers = struct(field1,value1,field2,value2,field3,value3,field4,value4);
 % Exaktes kontiunierliches System generieren
 sys = ss(A,B,C,D);
 % UEbertragungsfunktion des kont. Systems
-ksys = tf(sys);
+%ksys = tf(sys);
 % Sprungantwort fuer das kont. System
 %step(ksys, trange(end)) % Graph
 % Diskretes System generieren mit Ta = 0.05
@@ -212,6 +214,10 @@ dsys = c2d(sys, Ta, 'zoh');
 % Sprungantwort fuer das diskrete System
 dstep = step(dsys, trange(end));
 
+% Exaktes System (sehr fein abgetastet)
+TaEx = 0.001;
+trangeEx = 0:TaEx:Tend;
+dstep2 = step(c2d(sys, TaEx, 'zoh'), trangeEx);
 
 % Differnzen Plotten
 % Wertevectoren fuer s und v in array speichern
@@ -219,10 +225,15 @@ field1 = 's';
 field2 = 'v';
 field3 = 'linespace';
 field4 = 'l';
-value1 = {dstep(:,1)};
-value2 = {dstep(:,2)};
-value3 = {linspace(0, Tend, Tend/Ta + 1)};
-value4 = {sprintf('Diskr. Sys. Ta = %0.2fs', Ta)};
+value1 = {dstep2(:,1)};
+value2 = {dstep2(:,2)};
+value3 = {linspace(0, Tend, Tend/TaEx + 1)};
+value4 = {sprintf('Kont. Sys. Ta = %0.3fs', TaEx)};
+
+value1 = [value1, dstep(:,1)];
+value2 = [value2, dstep(:,2)];
+value3 = [value3, linspace(0, Tend, Tend/Ta + 1)];
+value4 = [value4, sprintf('disk. Sys. Ta = %0.2fs', Ta)];
 
 for i=1:length(s_eulers)
     value1 = [value1, s_eulers(i).x_euler(1,:)'];
@@ -236,35 +247,40 @@ s_plots_sv = struct(field1, value1, field2, value2, field3, value3, field4, valu
 
 % Plot fuer s
 figure
-plot(s_plots_sv(1).linespace, s_plots_sv(1).s, 'm',  ...
-    s_plots_sv(2).linespace, s_plots_sv(2).s, 'b', ...
-    s_plots_sv(3).linespace, s_plots_sv(3).s, 'g', ...
-    s_plots_sv(4).linespace, s_plots_sv(4).s, 'r', ...
-    s_plots_sv(5).linespace, s_plots_sv(5).s, 'k', ...
-    s_plots_sv(6).linespace, s_plots_sv(6).s, 'c')
+tt = 0:Tend;
+plot(s_plots_sv(1).linespace, s_plots_sv(1).s, 'b',  ...
+    s_plots_sv(2).linespace, s_plots_sv(2).s, 'm', ...
+    s_plots_sv(3).linespace, s_plots_sv(3).s, 'b', ...
+    s_plots_sv(4).linespace, s_plots_sv(4).s, 'g', ...
+    s_plots_sv(5).linespace, s_plots_sv(5).s, 'r', ...
+    s_plots_sv(6).linespace, s_plots_sv(6).s, 'k', ...
+    s_plots_sv(7).linespace, s_plots_sv(7).s, 'c')
+
+%plot(tt, sin(tt))
 grid on
 xlabel('Zeit t [s]')
 ylabel('Weg s')
 title('Graph fuer s')
 legend(s_plots_sv(1).l, s_plots_sv(2).l, s_plots_sv(3).l, ...
         s_plots_sv(4).l, s_plots_sv(5).l, s_plots_sv(6).l, ...
-        'Location', 'SouthEast')
+        s_plots_sv(7).l, 'Location', 'SouthEast')
     
 % plot fuer v
 figure
-plot(s_plots_sv(1).linespace, s_plots_sv(1).v, 'm',  ...
-    s_plots_sv(2).linespace, s_plots_sv(2).v, 'b', ...
-    s_plots_sv(3).linespace, s_plots_sv(3).v, 'g', ...
-    s_plots_sv(4).linespace, s_plots_sv(4).v, 'r', ...
-    s_plots_sv(5).linespace, s_plots_sv(5).v, 'k', ...
-    s_plots_sv(6).linespace, s_plots_sv(6).v, 'c')
+plot(s_plots_sv(1).linespace, s_plots_sv(1).v, 'b',  ...
+    s_plots_sv(2).linespace, s_plots_sv(2).v, 'm', ...
+    s_plots_sv(3).linespace, s_plots_sv(3).v, 'b', ...
+    s_plots_sv(4).linespace, s_plots_sv(4).v, 'g', ...
+    s_plots_sv(5).linespace, s_plots_sv(5).v, 'r', ...
+    s_plots_sv(6).linespace, s_plots_sv(6).v, 'k', ...
+    s_plots_sv(7).linespace, s_plots_sv(7).v, 'c')
 grid on
 xlabel('Zeit t [s]')
 ylabel('Geschweidigkeit v [m/s]')
 title('Graph fuer v')
 legend(s_plots_sv(1).l, s_plots_sv(2).l, s_plots_sv(3).l, ...
         s_plots_sv(4).l, s_plots_sv(5).l, s_plots_sv(6).l, ...
-        'Location', 'SouthEast')
+        s_plots_sv(7).l, 'Location', 'SouthEast')
 
 
 
@@ -300,11 +316,12 @@ x3_0 = 0;
 
 % numerishce Berechnung ploten
 figure
-plot(T,Y(:,1),'-',T,Y(:,2),'-.',T,Y(:,3),'.')
+plot(T,Y(:,1),'-',T,Y(:,2),'-',T,Y(:,3),'-')
 leg_y1 = sprintf('x1');
 leg_y2 = sprintf('x2');
 leg_y3 = sprintf('x3');
 title('Numerische Berechnung von 1.3 a)')
+grid on
 legend(leg_y1, leg_y2, leg_y3,'Location', 'SouthEast')
 
 
