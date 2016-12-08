@@ -338,6 +338,8 @@ legend(leg_y1, leg_y2, leg_y3,'Location', 'SouthEast')
 clear all;close all;clc;
 
 syms Ue Us Ua Uc1 Uc2 R1 R2 R3 K
+syms Q1 C1 C2 Ur1 Ur2 Ur4 Uc1_ Uc2_
+syms is ie ir2 ic1 ic2
 
 % Idealer nichtinvertierender Operationsverstärker
 % Allgemein: Ua = (1 + R2/R1) * Ue => Ua = V*Ue
@@ -349,4 +351,44 @@ x = [Uc1; Uc2];
 u = Ue;
 d = Us;
 y = Ua;
+
+% U = R*i
+% Q = C*U
+% i_c = dQ/dt = C*dU/dt = C*U'
+
+% C1(Uc1) = dQ1/dUc1
+% => dQ1 = C1(Uc1)*dUc1
+
+% Uc{1,2}_ der Unterstrich bezeichnet die Ableitung
+is = Us/R2;
+ie = Ue/R1;
+ic1 = C1*Uc1_;
+ic2 = C2*Uc2_;
+
+% Knotengleichungen
+k1 = ie - ir2 - ic1;
+k2 = ic2 - ir2 - is;
+
+% Maschengleichungen
+m1 = Ur1 + Ur2 + Uc2 - Ue;
+m2 = Ur4 + Uc2 - Us;
+m3 = Ur1 + Uc1 + Ua - Ue;
+m4 = Ur2 + Uc1 + Ua - Uc2;
+
+
+% Loesen nach Ur2_
+ir2 = solve (k2, ir2);
+Ur2 = R2 * ir2;
+
+m4 = Ur2 + Uc1 + Ua - Uc2;
+Uc2_ = solve(m4, Uc2_)
+ic2 = Uc2_ * C2;
+
+
+% Loesen nach Ur1_
+ie = (ic2 - is) + ic1; %k2 in k1 eingesetzt
+Ur1 = R1*ie;
+
+m3 = Ur1 + Uc1 + Ua - Ue;
+Uc1_ = solve(m3, Uc1_)
 
