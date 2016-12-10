@@ -421,8 +421,8 @@ Uc2r
 syms Uc1ref C1ref kc1
 
 Q1 = (C1ref + kc1*((Uc1/2) - Uc1ref))*Uc1;
-dQ1  = C1ref + Uc1*kc1 - kc1*Uc1ref; % Erste Ableitung von Q1 nach UC1
-ddQ1 = kc1; % Zweite Ableitung von Q1 nach UC1
+dQ1 = simplify(diff(Q1, Uc1)) % Erste Ableitung von Q1 nach UC1
+ddQ1 = simplify(diff(dQ1, Uc1)) % Zweite Ableitung von Q1 nach UC1
 
 C1 = dQ1;
 dC1 = ddQ1;
