@@ -41,9 +41,9 @@ UaR  = K*UC2R;
 
 % Errechnen Sie fuer die gegebene Ruhelage die Ableitungen der in C1
 % gespeicherter Ladung Q1 nach der anliegenden Spannung!
-dQ1  = C1_ref + UC1*kC1 - UC1_ref*kC1; % Erste Ableitung von Q1 nach UC1
+dQ1  = C1_ref + UC1R*kC1 - UC1_ref*kC1; % Erste Ableitung von Q1 nach UC1
 ddQ1 = kC1; % Zweite Ableitung von Q1 nach UC1
-
+C1 = dQ1;
 % Ergaenzen Sie die Systemmatrix A (Asys), die Eingangsvektoren bu (busys)
 % und bd (bdsys) sowie den Ausgangsvektor c (csys) und den Durchgriff d (dsys)
 % fuer das linearisierte System!
@@ -68,7 +68,7 @@ dd = [0];
 % die gesuchten Uebertragungsfunktionen (G und Gd) mittels tf() bestimmen.
 syms s
 G  = (1.371e06) / (s^2 + 1600*s + 9.959e05);
-Gd = (857.1 s + 1.616e06) / (s^2 + 1600 s + 9.959e05);
+Gd = (857.1*s + 1.616e06) / (s^2 + 1600*s + 9.959e05);
 
 %% Verstaerkungsfaktor V, Daempfungsgrad xi und Zeitkonstante T von G
 

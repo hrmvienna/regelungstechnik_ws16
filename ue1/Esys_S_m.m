@@ -139,11 +139,11 @@ function Output(block)
   y1(2) = UC2;
   
   % TODO: Port 2:
-  C1 = ; % Aktueller Wert der differentiellen Kapazitaet C1
+  C1 = C1_ref + UC1*kC1 - UC1_ref*kC1; % Aktueller Wert der differentiellen Kapazitaet C1
   y2(1) = C1;
   
   % TODO: Port 3:
-  Ua = ; % Ausgangsspannung
+  Ua = K*UC2; % Ausgangsspannung
   y3(1) = Ua; 
   
   % Schreiben auf Objekt block
@@ -178,11 +178,11 @@ function Derivatives(block)
   UC2 = x(2);
   
   % TODO: Erste Ableitung von Q1 nach UC1
-  dQ1 = ;
-  
+  dQ1 = C1_ref + UC1*kC1 - UC1_ref*kC1;
+  C1 = dQ1
   % TODO: Berechnen der Zeitableitungen der Zustaende
-  dx(1) = ;
-  dx(2) = ;
+  dx(1) = -(R1*UC1 - R1*UC2 + R2*UC1 - R2*Ue + K*R1*UC2 + K*R2*UC2)/(C1*R1*R2);
+  dx(2) = (UC1 - 2*UC2 + Us + K*UC2)/(C2*R2);
   
   % Schreiben auf Objekt block
   block.Derivatives.Data = dx;
