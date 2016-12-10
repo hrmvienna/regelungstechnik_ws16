@@ -364,7 +364,8 @@ is = Ur4/R2;
 ie = Ur1/R1;
 ic1 = C1*Uc1_;
 ic2 = C2*Uc2_;
-Ua = K*Uc2
+Ua = K*Uc2;
+y = subs(y); % Ua einsetzen
 
 % Knotengleichungen
 k1 = ie - ir2 - ic1;
@@ -389,7 +390,7 @@ ir2 = solve (k2, ir2);
 Ur2 = R2 * ir2;
 
 m4 = subs(subs(m4));
-Uc2_ = simplify(solve(m4, Uc2_))
+Uc2_ = simplify(solve(m4, Uc2_));
 ic2 = Uc2_ * C2;
 
 
@@ -397,10 +398,27 @@ ic2 = Uc2_ * C2;
 ie = (ic2 - is) + ic1; %k2 in k1 eingesetzt
 Ur1 = R1*ie;
 m3 = subs(m3);
-Uc1_ = simplify(solve(m3, Uc1_))
+Uc1_ = simplify(solve(m3, Uc1_));
 
+% X_punkt = f(x, u, d)
+Uc1_
+Uc2_
 
-% Ruhelagen berechnen
+% 1.4.2 - Linearisieren
+%
+% Linearisierung durch Anwendung der Taylor-Formel nach Satz 2.5 und 2.6
+
+% Erzeuge die differenzierten Matrizen
+A = [diff(Uc1_, Uc1), diff(Uc1_, Uc2); diff(Uc2_, Uc1), diff(Uc2_, Uc2)]
+bu = [diff(Uc1_, Ue); diff(Uc2_, Ue)]
+bd = [diff(Uc1_, Us); diff(Uc2_, Us)]
+
+cT = [diff(y, Uc1), diff(y, Uc2)]
+du = diff(y, Ue)
+dd = diff(y, Us)
+
+% 1.4.3 - Ruhelagen berechnen
+
 Uc1r = solve(Uc1_ == 0, Uc1);
 Uc2r = solve(Uc2_ == 0, Uc2);
 
@@ -408,54 +426,24 @@ Uc2r = solve(Uc2_ == 0, Uc2);
 Uc2r = solve(Uc2 == subs(Uc2r, Uc1, Uc1r), Uc2);
 
 % Uc2r in die erste Gleichung einsetzen und Uc1r berechnen
-Uc1r = subs(Uc1r, Uc2, Uc2r); %(R1*((Uc2r + Us - K*Uc2r)/R2 - Us/R2) - Ue + K*Uc2r)/(R1/R2 - 1);
+Uc1r = subs(Uc1r, Uc2, Uc2r);
+
+Uc1r = subs(Uc1r, [Ue, Us], [Ue_r, Us_r]);
+Uc2r = subs(Uc2r, [Ue, Us], [Ue_r, Us_r]);
 
 % Ruhelagen
-Uc1r
-Uc2r
+x_r = [Uc1r; Uc2r]
+yr = subs(y, Uc2, Uc2_r)
 
-% Linearisieren
 
-% Systemmatrix A berechnen: A = [a11 a12 ; a21 a22]
+% 1.4.4 - Übertragungsfunktion
+
 syms Uc1ref C1ref kc1
 
+% Systemmatrix A berechnen: A = [a11 a12 ; a21 a22]
 Q1 = (C1ref + kc1*((Uc1/2) - Uc1ref))*Uc1;
 dQ1 = simplify(diff(Q1, Uc1)) % Erste Ableitung von Q1 nach UC1
 ddQ1 = simplify(diff(dQ1, Uc1)) % Zweite Ableitung von Q1 nach UC1
 
 C1 = dQ1;
 dC1 = ddQ1;
-
-Uc1_ = subs(Uc1_)
-Uc2_ = subs(Uc2_)
-
-
-% Parameter
-R1      = 625;
-R2      = 3500;
-K       = 3;
-C1ref  = 1e-6;
-Uc1ref = -10;
-kc1     = 800e-9;
-C2      = 1e-6;
-
-% Festlegung der Ruhelagen
-Uer = 5;
-Usr = 5;
-Uc1r_v = subs(Uc1r, [Ue, Us], [Uer, Usr])
-Uc2r_v = subs(Uc2r, [Ue, Us], [Uer, Usr])
-
-% Erzeuge die differenzierten Matrizen
-A = [diff(Uc1_, Uc1), diff(Uc1_, Uc2); diff(Uc2_, Uc1), diff(Uc2_, Uc2)]
-bu = [diff(Uc1_, Ue); diff(Uc2_, Ue)]
-bd = [diff(Uc1_, Us); diff(Uc2_, Us)]
-
-% Ersetze Zustand, Eingang und Stoereingang mit den Ruhelagen
-A = subs(A, [Uc1, Uc2, Ue, Us], [Uc1r_v, Uc2r_v, Uer, Usr])
-bu = subs(bu, [Uc1, Uc2, Ue, Us], [Uc1r_v, Uc2r_v, Uer, Usr])
-bd = subs(bd, [Uc1, Uc2, Ue, Us], [Uc1r_v, Uc2r_v, Uer, Usr])
-
-% Setze Ruhelagen ein
-A = double(subs(A))
-bu = double(subs(bu))
-bd = double(subs(bd))
