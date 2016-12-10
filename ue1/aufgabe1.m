@@ -389,7 +389,7 @@ ir2 = solve (k2, ir2);
 Ur2 = R2 * ir2;
 
 m4 = subs(subs(m4));
-Uc2_ = solve(m4, Uc2_)
+Uc2_ = simplify(solve(m4, Uc2_))
 ic2 = Uc2_ * C2;
 
 
@@ -397,16 +397,15 @@ ic2 = Uc2_ * C2;
 ie = (ic2 - is) + ic1; %k2 in k1 eingesetzt
 Ur1 = R1*ie;
 m3 = subs(m3);
-Uc1_ = solve(m3, Uc1_)
+Uc1_ = simplify(solve(m3, Uc1_))
 
 
 % Ruhelagen berechnen
-Uc1r = solve(Uc1_, Uc1);
-Uc2r = solve(Uc2_, Uc2);
+Uc1r = solve(Uc1_ == 0, Uc1);
+Uc2r = solve(Uc2_ == 0, Uc2);
 
 % in die zweite Geichung setzten wir Uc1r ein und loesen nach Uc2r auf
-rl2 = subs(Uc2r, Uc1, Uc1r);
-Uc2r = solve(rl2, Uc2);
+Uc2r = solve(Uc2 == subs(Uc2r, Uc1, Uc1r), Uc2);
 
 % Uc2r in die erste Gleichung einsetzen und Uc1r berechnen
 Uc1r = subs(Uc1r, Uc2, Uc2r); %(R1*((Uc2r + Us - K*Uc2r)/R2 - Us/R2) - Ue + K*Uc2r)/(R1/R2 - 1);
