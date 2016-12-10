@@ -77,9 +77,9 @@ Gd = (857.1 s + 1.616e06) / (s^2 + 1600 s + 9.959e05);
 % Bestimmen Sie den Verstaerkungsfaktor V, den Daempfungsgrad xi und die
 % Zeitkonstante T der Uebertragungsfunktion G.
 
-% V  = ;
-% T  = ;
-% xi = ;
+% V  = 1.371e06;
+% T  = 0.0010;
+% xi = 0.8016;
 
 %% Bodediagramme der Uebertragungsfunktionen G und Gd
 

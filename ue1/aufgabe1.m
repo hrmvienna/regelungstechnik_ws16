@@ -466,12 +466,36 @@ cT = double(subs(subs(subs(cT), [Uc1, Uc2], [Uc1r, Uc2r])));
 du = double(subs(subs(subs(du), [Uc1, Uc2], [Uc1r, Uc2r])));
 dd = double(subs(subs(subs(dd), [Uc1, Uc2], [Uc1r, Uc2r])));
 
+% Zustandsraumdarstellung fuer delta_d = 0, fuer Gu(s) von delta_u nach
 % delta_y
 sys1 = ss(A,bu,cT,du);
 % UEbertragungsfunktion Gu(s)
 Gu = tf(sys1)
 
+% Zustandsraumdarstellung fuer delta_u = 0, fuer Gd(s) von delta_d nach
 % delta_y
 sys2 = ss(A,bd,cT,dd);
-% UEbertragungsfunktion Gd(s)
+% Uebertragungsfunktion Gd(s)
 Gd = tf(sys2)
+
+
+% Aufgabe 1.4.5
+
+V = 1.371e06
+m = 9.959e05;
+% 1 + 2*xi*(s*T) + (s*T)^2 = s^2 + 1600 s + m
+% 1 + 1600/m + 1/m s^2 => T^2 = 1/m => T = +/- sqrt(1/m)
+% 2*xi*T = 1600/m => xi = 800/sqrt(m)
+xi = 800/sqrt(m)
+T = sqrt(1/m)
+
+
+% Aufgabe 1.4.6
+figure
+bode(Gu, Gd)
+grid on
+legend('G(s)','Gd(s)','Location', 'SouthEast')
+
+%TODO interpretation
+% tl;dr: Stoerung geht direkt auf den Ausgang durch, sogar besser als der
+% Eingang
