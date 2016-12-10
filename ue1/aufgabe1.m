@@ -378,11 +378,11 @@ m3 = Ur1 + Uc1 + Ua - Ue;
 m4 = -Ur2 + Uc1 + Ua - Uc2;
 
 % is aus m2
-Ur4 = solve(m2, Ur4)
+Ur4 = solve(m2, Ur4);
 is = subs(is);
 
 % ie aus m3
-Ur1 = solve(m3, Ur1)
+Ur1 = solve(m3, Ur1);
 ie = subs(ie);
 
 % Loesen nach Ur2_
@@ -419,6 +419,8 @@ dd = diff(y, Us)
 
 % 1.4.3 - Ruhelagen berechnen
 
+syms UeR UsR
+
 Uc1r = solve(Uc1_ == 0, Uc1);
 Uc2r = solve(Uc2_ == 0, Uc2);
 
@@ -428,20 +430,20 @@ Uc2r = solve(Uc2 == subs(Uc2r, Uc1, Uc1r), Uc2);
 % Uc2r in die erste Gleichung einsetzen und Uc1r berechnen
 Uc1r = subs(Uc1r, Uc2, Uc2r);
 
-Uc1r = subs(Uc1r, [Ue, Us], [Ue_r, Us_r]);
-Uc2r = subs(Uc2r, [Ue, Us], [Ue_r, Us_r]);
+Uc1r = simplify(subs(Uc1r, [Ue, Us], [UeR, UsR]));
+Uc2r = simplify(subs(Uc2r, [Ue, Us], [UeR, UsR]));
 
 % Ruhelagen
 x_r = [Uc1r; Uc2r]
-yr = subs(y, Uc2, Uc2_r)
+yr = subs(y, Uc2, Uc2r)
 
 
 % 1.4.4 - Übertragungsfunktion
 
-syms Uc1ref C1ref kc1
+syms UC1_ref C1_ref kC1
 
 % Systemmatrix A berechnen: A = [a11 a12 ; a21 a22]
-Q1 = (C1ref + kc1*((Uc1/2) - Uc1ref))*Uc1;
+Q1 = (C1_ref + kC1*((Uc1/2) - UC1_ref))*Uc1;
 dQ1 = simplify(diff(Q1, Uc1)) % Erste Ableitung von Q1 nach UC1
 ddQ1 = simplify(diff(dQ1, Uc1)) % Zweite Ableitung von Q1 nach UC1
 

@@ -7,11 +7,11 @@ clc;
 % Parameter
 R1      = 625;    % Widerstand in Ohm
 R2      = 3500;   % Widerstand in Ohm
-K       = 3;      % Spannungsverst‰rkung
-C1_ref  = 1e-6;   % Referenz-Kapazit‰tswert auf Kennlinie von C1 in F
+K       = 3;      % Spannungsverstaerkung
+C1_ref  = 1e-6;   % Referenz-Kapazitaetswert auf Kennlinie von C1 in F
 UC1_ref = -10;    % Referenz-Spannungswert auf Kennlinie von C1 in V
 kC1     = 800e-9; % Steigung der Kennlinie von C1 in F/V
-C2      = 1e-6;   % Kapazit‰t in F
+C2      = 1e-6;   % Kapazitaet in F
 
 % Festlegung der Ruhelage in Volt
 UeR = 5;
@@ -35,37 +35,37 @@ Us = 1;     % Endwert des Sprunges in Volt
 % Aufgabe 1.4.4
 % -------------
 % Errechnen Sie die Ruhelage des Systems!
-% UC1R = ;
-% UC2R = ;
-% UaR  = ;
+UC1R = -(K*R2*UeR - R1*UsR - 2*R2*UeR + K*R1*UsR + K*R2*UsR)/(R1 + 2*R2);
+UC2R = (R2*UeR + R1*UsR + R2*UsR)/(R1 + 2*R2);
+UaR  = K*UC2R;
 
-% Errechnen Sie f¸r die gegebene Ruhelage die Ableitungen der in C1 
+% Errechnen Sie fuer die gegebene Ruhelage die Ableitungen der in C1
 % gespeicherter Ladung Q1 nach der anliegenden Spannung!
-% dQ1  = ; % Erste Ableitung von Q1 nach UC1
-% ddQ1 = ; % Zweite Ableitung von Q1 nach UC1
+dQ1  = C1_ref + UC1*kC1 - UC1_ref*kC1; % Erste Ableitung von Q1 nach UC1
+ddQ1 = kC1; % Zweite Ableitung von Q1 nach UC1
 
 % Ergaenzen Sie die Systemmatrix A (Asys), die Eingangsvektoren bu (busys)
 % und bd (bdsys) sowie den Ausgangsvektor c (csys) und den Durchgriff d (dsys)
-% f¸r das linearisierte System!
+% fuer das linearisierte System!
 
-% A11 = ;
-% A12 = ;
-% A21 = ;
-% A22 = ;
+A11 = -(R1 + R2)/(C1*R1*R2);
+A12 = -(K*R1 - R1 + K*R2)/(C1*R1*R2);
+A21 = 1/(C2*R2);
+A22 = (K - 2)/(C2*R2);
 
-% A  = [A11,A12;A21,A22];
-% bu = [];
-% bd = [];
-% c  = [];
-% du = [];
-% dd = [];
+A  = [A11,A12;A21,A22];
+bu = [1/(C1*R1);0];
+bd = [0;1/(C2*R2)];
+c  = [0, K];
+du = [0];
+dd = [0];
 %% Uebertragungsfunktion G (Eingang u -> Ausgang y) und Uebertragungsfunktion Gd (Stoerung d -> Ausgang y)
 
 % Aufgabe 1.4.4
 % -------------
-% Bestimmen Sie zun‰chst eine MISO- oder zwei SISO-Zustandsraum- 
-% darstellungen mittels ss(). Anschlieﬂend koennen Sie in beiden Faellen
-% die gesuchten ‹bertragungsfunktionen (G und Gd) mittels tf() bestimmen.
+% Bestimmen Sie zunaechst eine MISO- oder zwei SISO-Zustandsraum-
+% darstellungen mittels ss(). Anschliessend koennen Sie in beiden Faellen
+% die gesuchten Uebertragungsfunktionen (G und Gd) mittels tf() bestimmen.
 
 % G  = ;
 % Gd = ;
@@ -75,7 +75,7 @@ Us = 1;     % Endwert des Sprunges in Volt
 % Aufgabe 1.4.5
 % -------------
 % Bestimmen Sie den Verstaerkungsfaktor V, den Daempfungsgrad xi und die
-% Zeitkonstante T der ‹bertragungsfunktion G. 
+% Zeitkonstante T der Uebertragungsfunktion G.
 
 % V  = ;
 % T  = ;
