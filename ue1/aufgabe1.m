@@ -2,7 +2,7 @@
 % Aufgabe 1.1:
 % ===========
 
-clear all   % Es werden alle Variablen gelöscht
+clear all   % Es werden alle Variablen geloescht
 close all   % Es werden alle Fenster geschlossen
 clc         % Das Command Window wird zurueckgesetzt
 
@@ -341,7 +341,7 @@ syms Ue Us Ua Uc1 Uc2 R1 R2 R3 K
 syms Q1 C1 C2 Ur1 Ur2 Ur4 Uc1_ Uc2_
 syms is ie ir2 ic1 ic2
 
-% Idealer nichtinvertierender Operationsverstärker
+% Idealer nichtinvertierender Operationsverstaerker
 % Allgemein: Ua = (1 + R2/R1) * Ue => Ua = V*Ue
 % hier: V = 1 + ((K-1)*R3)/R3 = 1 + K - 1 = K
 
