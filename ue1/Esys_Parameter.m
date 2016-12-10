@@ -66,9 +66,9 @@ dd = [0];
 % Bestimmen Sie zunaechst eine MISO- oder zwei SISO-Zustandsraum-
 % darstellungen mittels ss(). Anschliessend koennen Sie in beiden Faellen
 % die gesuchten Uebertragungsfunktionen (G und Gd) mittels tf() bestimmen.
-
-% G  = ;
-% Gd = ;
+syms s
+G  = (1.371e06) / (s^2 + 1600*s + 9.959e05);
+Gd = (857.1 s + 1.616e06) / (s^2 + 1600 s + 9.959e05);
 
 %% Verstaerkungsfaktor V, Daempfungsgrad xi und Zeitkonstante T von G
 

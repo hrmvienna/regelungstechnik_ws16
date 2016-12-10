@@ -446,6 +446,32 @@ syms UC1_ref C1_ref kC1
 Q1 = (C1_ref + kC1*((Uc1/2) - UC1_ref))*Uc1;
 dQ1 = simplify(diff(Q1, Uc1)) % Erste Ableitung von Q1 nach UC1
 ddQ1 = simplify(diff(dQ1, Uc1)) % Zweite Ableitung von Q1 nach UC1
-
 C1 = dQ1;
 dC1 = ddQ1;
+
+R1      = 625;    % Widerstand in Ohm
+R2      = 3500;   % Widerstand in Ohm
+K       = 3;      % Spannungsverstaerkung
+C1_ref  = 1e-6;   % Referenz-Kapazitaetswert auf Kennlinie von C1 in F
+UC1_ref = -10;    % Referenz-Spannungswert auf Kennlinie von C1 in V
+kC1     = 800e-9; % Steigung der Kennlinie von C1 in F/V
+C2      = 1e-6; 
+UeR = 5;
+UsR = 5;
+
+A = double(subs(subs(subs(A), [Uc1, Uc2], [Uc1r, Uc2r])));
+bu = double(subs(subs(subs(bu), [Uc1, Uc2], [Uc1r, Uc2r])));
+bd = double(subs(subs(subs(bd), [Uc1, Uc2], [Uc1r, Uc2r])));
+cT = double(subs(subs(subs(cT), [Uc1, Uc2], [Uc1r, Uc2r])));
+du = double(subs(subs(subs(du), [Uc1, Uc2], [Uc1r, Uc2r])));
+dd = double(subs(subs(subs(dd), [Uc1, Uc2], [Uc1r, Uc2r])));
+
+% delta_y
+sys1 = ss(A,bu,cT,du);
+% UEbertragungsfunktion Gu(s)
+Gu = tf(sys1)
+
+% delta_y
+sys2 = ss(A,bd,cT,dd);
+% UEbertragungsfunktion Gd(s)
+Gd = tf(sys2)
