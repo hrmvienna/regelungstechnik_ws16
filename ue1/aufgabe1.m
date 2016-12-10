@@ -360,8 +360,8 @@ y = Ua;
 % => dQ1 = C1(Uc1)*dUc1
 
 % Uc{1,2}_ der Unterstrich bezeichnet die Ableitung
-is = Us/R2;
-ie = Ue/R1;
+is = Ur4/R2;
+ie = Ur1/R1;
 ic1 = C1*Uc1_;
 ic2 = C2*Uc2_;
 Ua = K*Uc2
@@ -376,12 +376,19 @@ m2 = Ur4 + Uc2 - Us;
 m3 = Ur1 + Uc1 + Ua - Ue;
 m4 = -Ur2 + Uc1 + Ua - Uc2;
 
+% is aus m2
+Ur4 = solve(m2, Ur4)
+is = subs(is);
+
+% ie aus m3
+Ur1 = solve(m3, Ur1)
+ie = subs(ie);
 
 % Loesen nach Ur2_
 ir2 = solve (k2, ir2);
 Ur2 = R2 * ir2;
 
-m4 = subs(m4);
+m4 = subs(subs(m4));
 Uc2_ = solve(m4, Uc2_)
 ic2 = Uc2_ * C2;
 
@@ -436,24 +443,20 @@ C2      = 1e-6;
 % Festlegung der Ruhelagen
 Uer = 5;
 Usr = 5;
-Uc1r_v = subs(Uc1r)
-Uc2r_v = subs(Uc2r)
+Uc1r_v = subs(Uc1r, [Ue, Us], [Uer, Usr])
+Uc2r_v = subs(Uc2r, [Ue, Us], [Uer, Usr])
 
-% subs(s, old, new) = ersetze in s alle old durch new
-% subs(s) = s auswerten, also bekannten Variablen einsetzten und aurechnen
-% double() = numerischen Wert berechnen
-% subs ein paarmal schachteln, um alle ruhelagen einzusetzen
-a11 = double(subs(subs(subs(subs(subs(diff(Uc1_, Uc1), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
-a12 = double(subs(subs(subs(subs(subs(diff(Uc1_, Uc2), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
-a21 = double(subs(subs(subs(subs(subs(diff(Uc2_, Uc1), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
-a22 = double(subs(subs(subs(subs(subs(diff(Uc2_, Uc2), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
+% Erzeuge die differenzierten Matrizen
+A = [diff(Uc1_, Uc1), diff(Uc1_, Uc2); diff(Uc2_, Uc1), diff(Uc2_, Uc2)]
+bu = [diff(Uc1_, Ue); diff(Uc2_, Ue)]
+bd = [diff(Uc1_, Us); diff(Uc2_, Us)]
 
-bu1 = double(subs(subs(subs(subs(subs(diff(Uc1_, Ue), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
-bu2 = double(subs(subs(subs(subs(subs(diff(Uc2_, Ue), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
+% Ersetze Zustand, Eingang und Stoereingang mit den Ruhelagen
+A = subs(A, [Uc1, Uc2, Ue, Us], [Uc1r_v, Uc2r_v, Uer, Usr])
+bu = subs(bu, [Uc1, Uc2, Ue, Us], [Uc1r_v, Uc2r_v, Uer, Usr])
+bd = subs(bd, [Uc1, Uc2, Ue, Us], [Uc1r_v, Uc2r_v, Uer, Usr])
 
-bd1 = double(subs(subs(subs(subs(subs(diff(Uc1_, Us), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
-bd2 = double(subs(subs(subs(subs(subs(diff(Uc2_, Us), Uc1, Uc1r_v), Uc2, Uc2r_v)), Ue, Uer), Us, Usr));
-
-A = [a11 a12; a21 a22]
-bu = [bu1; bu2]
-bd = [bd1; bd2]
+% Setze Ruhelagen ein
+A = double(subs(A))
+bu = double(subs(bu))
+bd = double(subs(bd))
