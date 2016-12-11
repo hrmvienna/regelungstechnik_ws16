@@ -466,18 +466,11 @@ cT = double(subs(subs(subs(cT), [Uc1, Uc2], [Uc1r, Uc2r])));
 du = double(subs(subs(subs(du), [Uc1, Uc2], [Uc1r, Uc2r])));
 dd = double(subs(subs(subs(dd), [Uc1, Uc2], [Uc1r, Uc2r])));
 
-% Zustandsraumdarstellung fuer delta_d = 0, fuer Gu(s) von delta_u nach
-% delta_y
-sys1 = ss(A,bu,cT,du);
-% UEbertragungsfunktion Gu(s)
-Gu = tf(sys1)
-
-% Zustandsraumdarstellung fuer delta_u = 0, fuer Gd(s) von delta_d nach
-% delta_y
-sys2 = ss(A,bd,cT,dd);
-% Uebertragungsfunktion Gd(s)
-Gd = tf(sys2)
-
+% Zustandsraumdarstellung 
+sys_gl = ss(A,[bu bd],cT,[du dd]);
+G_sys = tf(sys_gl);
+G = G_sys(1)  % Uebertragungsfunktion von u zu y
+Gd = G_sys(2) % Uebertragungsfunktion von d zu y
 
 % Aufgabe 1.4.5
 
@@ -492,7 +485,7 @@ T = sqrt(1/m)
 
 % Aufgabe 1.4.6
 figure
-bode(Gu, Gd)
+bode(G, Gd)
 grid on
 legend('G(s)','Gd(s)','Location', 'SouthEast')
 
