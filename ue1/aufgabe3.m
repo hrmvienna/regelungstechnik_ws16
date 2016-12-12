@@ -40,3 +40,18 @@ legend(leg_y1, leg_y2, leg_y3,'Location', 'SouthEast')
 
 % System um die Ruhelage xr = ur = 0 linearisieren
 % Am Zettel
+
+x1r = 0;
+x2r = 0;
+x3r = 0;
+ur = 0;
+
+% Taylorform 2. Ordnung, laut Satz 2.5 u. 2.6
+A = [diff(xx, x1) diff(xx, x2) diff(xx, x3)]
+b = [diff(xx, u)]
+% Ruhelagen einsetzen
+A = subs (A, [x1, x2, x3, u], [x1r, x2r, x3r, ur])
+b = subs (b, [x1], [x1r])
+% Realteile der Eigenwerte von A, zur bestimmung der globalen
+% asymptotischen Stabilitaet
+real(eig(A))
