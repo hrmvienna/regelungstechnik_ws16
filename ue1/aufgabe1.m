@@ -41,9 +41,11 @@ x = 0:1:10;
 n = 1;
 y = 0
 
+figure
 for n=1:1:100
     y = y + A*(4/(pi*(2*n -1))) * sin((2*n -1)*x);
     plot(y)
+    ylim([-15, 15])
     title(['rec(x) for n = ', num2str(n)])
     grid on
     pause()
