@@ -51,7 +51,7 @@ y_p = ct*dck
 % dpk = a*Sk
 % yk = S
 syms a Sk uk din dout
-% Zustandsgrößen für das Gesamtsystem: xg = [Sk, dck]
+% Zustandsgroessen fuer das Gesamtsystem: xg = [Sk, dck]
 % Sk+1 = aktueller Inhalt + ("Zufluesse" - "Abfluesse") * Abtastzeit [Da 
 % die Zufluesse und Abluesse als Raten angegeben sind]
 % Sk+1 = Sk + Ta*uk + Ta*dck - Ta*a*Sk
@@ -64,26 +64,38 @@ dpk = a*Sk;
 Sk_  = (1 - a*Ta)*Sk + Ta*(uk + dck)
 dck_ = Phi_p*dck + Gamma_p*dpk
 
+% Matrizen und Zustandsvektor der Zustandsraumdarstellung fuer 
+% die Zustaende Sk und dck; _g steht fuer Gesamt
+x_g= [Sk dck]
+
+A_g = [(1-Ta*a) Ta; (1-exp(-Ta/T1))*a*c exp(-Ta/T1)]
+B_g = [Ta ; 0];
+C_g = [1 0];
+D_g = 0;
+
 %% Aufgabe 1.6.3
 set_param('Aufgabe_1_6','AlgebraicLoopSolver','LineSearch')
 % Parameter
 Ta = 10^(-6); % 1 mus
-T1 = 10^(-2); % 1 ms
+T1 = 10^(-3); % 1 ms
 c = 0.5;
 a = 0.4; %s^-1
 
 Phi_p_v = double(subs(Phi_p))
 Gamma_p_v = double(subs(Gamma_p))
-b_v = double(subs(b))
-A_v = double(subs(A))
 ct_v = double(subs(ct))
+A_g = double(subs(A_g))
+B_g = double(subs(B_g))
 
+% Diskrete Zustandsdarstellung fuer den Processor
 sys_p = ss(Phi_p_v, Gamma_p_v, ct_v, d, Ta)
-Gz = tf(sys_p)
+%Gz = tf(sys_p);
 
 % Prozessor G(s) mit system toolbox in den Zustandsraum transformiert
-Gs_p = tf(c, [T1, 1])
-ss(Gs_p)
+%Gs_p = tf(c, [T1, 1]);
+%Sys_p = ss(Gs_p);
+%Dsys_p = c2d(Sys_p, Ta)
+% Dsys_p == sys_p => korrekt
 
 %% Aufgabe 1.6.4
 
