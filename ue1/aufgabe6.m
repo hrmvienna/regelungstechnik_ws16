@@ -95,16 +95,39 @@ sys_p = ss(Phi_p_v, Gamma_p_v, ct_v, d, Ta)
 %Dsys_p = c2d(Sys_p, Ta)
 % Dsys_p == sys_p => korrekt
 
-%% Aufgabe 1.6.4
+%% Aufgabe 1.6.4 - Ruhelage fuer den Speicher S
 
-% Ruhelage Sr fuer ur = 1
-% x_ = A_g * x_gr + B*ur = 0
-% => x_gr = -A^-1 * B*ur
+% fuer k -> unendlich und konstantem Eingang ist x_k+1 = x_k, somit ergibt 
+% sich die Systemgleichung zu:
+% xk+1 = A + xk + B*uk => k->inf => xk = A*xk + B*uk => xr = (E-A)^-1 *B*ur
 ur = 1;
 x_gr = - mldivide(A_g, B_g)*ur
+x_g_r = (eye(2) - A_g)^(-1)*B_g*ur;
+x_g_r_v = double(subs(x_g_r));
 
-% TODO mit endwerdsatz berechnen ?
+% Ruhelage bei einem stationaeren Eingang von u=1
+Sr = x_g_r_v(1)
+dcr = x_g_r_v(2)
 
-%% Aufgabe 1.6.5
+%% Aufgabe 1.6.5 - Max Speicherbedarf fuer einen 1000er Sprung fuer 5ms
 
-% TODO
+% Anfangszustand im Arbeitspunkt x=[Sr, dcr] mit ur = 1
+i_dck = dcr;
+i_Sk = Sr;
+
+k = 5*10^(-3)/Ta; % Anzahl iterationsschritte ueber 5 ms
+% laut Gleichung 6.33, Seite 148
+for j = 0:1:k
+    % dck+1 = Phi_p * dck + Sk*a*Gamma_p
+    i_dck_1 = Phi_p_v*i_dck + Gamma_p_v*a*i_Sk;
+    
+    % Sk+1 = Ta*(dck + uk) - Sk*(Ta*a - 1)
+    i_Sk_1 = Ta*(i_dck_1 + u_c) - i_Sk*(Ta*a - 1);
+    
+    i_dck = i_dck_1;
+    i_Sk = i_Sk_1;    
+end
+
+% Speicherinhalt nach 5ms mit uk=1000, ausgehend vom Arbeitspunkt(uk=1) 
+% ist 9.9927
+i_Sk
