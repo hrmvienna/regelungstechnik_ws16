@@ -74,7 +74,7 @@ C_g = [1 0];
 D_g = 0;
 
 %% Aufgabe 1.6.3
-set_param('Aufgabe_1_6','AlgebraicLoopSolver','LineSearch')
+
 % Parameter
 Ta = 10^(-6); % 1 mus
 T1 = 10^(-3); % 1 ms
@@ -99,7 +99,13 @@ sys_p = ss(Phi_p_v, Gamma_p_v, ct_v, d, Ta)
 
 %% Aufgabe 1.6.4
 
-% TODO
+% Ruhelage Sr fuer ur = 1
+% x_ = A_g * x_gr + B*ur = 0
+% => x_gr = -A^-1 * B*ur
+ur = 1;
+x_gr = - mldivide(A_g, B_g)*ur
+
+% TODO mit endwerdsatz berechnen ?
 
 %% Aufgabe 1.6.5
 
