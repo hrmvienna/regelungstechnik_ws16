@@ -55,7 +55,7 @@ sig = 1;
 f = sig;
 u = f;
 
-% Allgemeine Loesung
+% Allgemeine Loesung, fuer u = Einheitssprung = 1, da t>0 betrachtet wird
 sa = dsolve('D2s = -(k/m)*s - (c/m)*Ds +1/m')
 
 % partikulaere Loesung

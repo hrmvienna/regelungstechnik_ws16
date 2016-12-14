@@ -55,7 +55,7 @@ syms a Sk uk din dout
 % die Zufluesse und Abluesse als Raten angegeben sind]
 % Sk+1 = Sk + Ta*uk + Ta*dck - Ta*dpk
 % Sk+1 = Sk + Ta*(uk + dck - a*Sk);
-% dck+1 = Phi_p * xk + Gamma_p*dpk
+% dck+1 = Phi_p * dck + Gamma_p*dpk
 dpk = a*Sk;
 
 % Gesamtsystemgleichungen
