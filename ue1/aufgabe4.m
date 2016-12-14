@@ -158,6 +158,6 @@ bode(G, Gd)
 grid on
 legend('G(s)','Gd(s)','Location', 'SouthEast')
 
-%TODO interpretation
-% tl;dr: Stoerung geht direkt auf den Ausgang durch, sogar besser als der
-% Eingang
+% interpretation am Zettel und in Worten
+% tl;dr: Die Stoerung wird besser verstaerkt als das Eingangssignal und hat
+% eine bessere Phasenreserve
