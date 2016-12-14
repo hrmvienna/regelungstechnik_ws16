@@ -66,6 +66,8 @@ dck_1 = Phi_p*dck + Gamma_p*dpk
 % die Zustaende Sk und dck; _g steht fuer Gesamt
 x_g= [Sk; dck]
 
+% x_k+1 = A_g*x_g + B_g*u_k
+% y_k = C_g*x_g + D_g*u_k
 A_g = [(1-Ta*a) Ta; (1-exp(-Ta/T1))*a*c exp(-Ta/T1)]
 B_g = [Ta ; 0];
 C_g = [1 0];
@@ -85,15 +87,6 @@ ct_v = double(subs(ct))
 A_g_v = double(subs(A_g))
 B_g_v = double(subs(B_g))
 
-% Diskrete Zustandsdarstellung fuer den Processor
-sys_p = ss(Phi_p_v, Gamma_p_v, ct_v, d, Ta)
-%Gz = tf(sys_p);
-
-% Prozessor G(s) mit system toolbox in den Zustandsraum transformiert
-%Gs_p = tf(c, [T1, 1]);
-%Sys_p = ss(Gs_p);
-%Dsys_p = c2d(Sys_p, Ta)
-% Dsys_p == sys_p => korrekt
 
 %% Aufgabe 1.6.4 - Ruhelage fuer den Speicher S
 
