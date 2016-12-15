@@ -37,7 +37,7 @@ clear all;close all;clc;
 % rect(x) ~~ A* sum(k=1 bis n) 4/pi*(2k-1) * sin((2k-1)x)
 
 A = 10;
-x = 0:1:10;
+x = 0:0.1:10;
 n = 1;
 y = 0
 
@@ -48,8 +48,8 @@ for n=1:1:100
     ylim([-15, 15])
     title(['rec(x) for n = ', num2str(n)])
     grid on
-    pause()
-    %pause(0.01)
+    %pause()
+    pause(0.01)
 end
 
 %% 
