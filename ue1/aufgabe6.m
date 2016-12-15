@@ -107,6 +107,7 @@ dcr = x_g_r_v(2)
 % Anfangszustand im Arbeitspunkt x=[Sr, dcr] mit ur = 1
 i_dck = dcr;
 i_Sk = Sr;
+u_c = 1000;
 
 k = 5*10^(-3)/Ta; % Anzahl iterationsschritte ueber 5 ms
 % laut Gleichung 6.33, Seite 148
