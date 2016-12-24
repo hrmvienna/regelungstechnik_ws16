@@ -43,7 +43,7 @@ clc         % Das Command Window wird zurueckgesetzt
 
 syms s rho r_d T_t V
 
-% A:
+%% A: Streckenuebertragungsfunktion
 
 % Uebertragungsfunktion
 
@@ -55,22 +55,25 @@ n_L = s^2 + 1600 * s + 9.959e05
 G = z_L / n_L
 
 % Stoerfunktion
-G_d = (857.1 * s + 1.616e06) / (s^2 + 1600 * s + 9.959e05)
+G_d = (857.1 * s + 1.616e06) / n_L
 
 % Anforderungen
-tr=3e-3
-ue=5
+t_r=3e-3
+u_e=5
 e_a_inf = 0
 
-% B:
+%% B: Kenngroessen berechne: Durchtrittsfrequenz und Phasenreserve
+% Der Regler muss mind. eine Polstelle bei s = 0 haben, da der Regelfehler
+% fuer die Sprungantwort e_inf = 0. (5.10, Seite 125)
 
-% Errechne die Durchtrittsfrequenz, Phasenreserve
+% phi - phasenreserve
+% u_e - Prozentuelles Ueberschwingen
 
 % (5.2) omega_c * tr ~~ 1.5
-omega_c = 1.5/tr
+omega_c = 1.5/t_r
 
 % (5.3) phi[grad] + u_e[%] = 70
-phi = 70 - ue
+phi = 70 - u_e
 
 % (5.9) e_inf = lim[s->0]((s*()s^p*n_L(s)) / (s^p*n_L(s) +
 % V*z_L(s)*e^(-sT_t)))*r_d(s)
@@ -86,26 +89,25 @@ e_inf1 = subs(e_inf, [r_d, rho], [r_d1, 0])
 e_inf2 = subs(e_inf, [r_d, rho], [r_d1, 1])
 
 
-%%
+%% C Reglerentwurf: zuerste Phase und Verstaerkung der bekannten Terme 
+% berechnen und danach diese Korrekieren.
+% R_1 = 1/s
 
-% phi - phasenreserve
-% u_e - Prozentuelles Ueberschwingen
+% Uebertragungsfunktion der Strecke, T_ry - Eingang zu Ausgang
+b = [1.371e06];
+a = [1 1600 9.959e05];
+T_ry = tf(b, a)
 
-% C:
+% Regler mit allen bisher bekannten Termen, R_1(s) = 1/s
+R_1 = tf(1,[1 0])
 
-% Uebertragungsfunktion der Strecke
-b = [0 0 1.371e06]
-a = [1 1600 9.959e05]
-G_s_tf = tf(b, a)
-
-% Uebertragungsfunktion der Regelstrecke L_1(s) = G(s)*R(s)
+% Uebertragungsfunktion der Regelstrecke L_1(s) = R_1(s)*G(s)
 % wobei fuer R(s) ein PI Regler verwendet wurde. (Siehe [5.1 - PI-Reglerentwurf]
-b2 = [0 0 0 1.371e06]
-a2 = [1 1600 9.959e05 0]
-L_1_s = tf(b2, a2)
+L_1 = R_1*T_ry
 
-
-bode(G_s_tf, L_1_s)
+figure
+bode(T_ry, L_1)
+grid on
 legend('G(s)', 'L1(s)');
 
 
@@ -113,27 +115,23 @@ legend('G(s)', 'L1(s)');
 % E:
 % F:
 
-%%
-
-% Anforderungen an den offenen und geschlossenen Kreis
-tr=3e-3;
-ue=5;
-
-
 %% Aufgabe 2.1.2 PI Regler
 
-%Gesamtregler und offener Kreis
+% Ist das FKL-Verfahren ein exaktes Entwurfsverfahren, wenn die Strecke ein
+% Verzoegerungsglied 2-ter Ordnung ist?
+
+% Gesamtregler und offener Kreis
 % R_PI = 
 % L_PI = 
 % bode(L_PI,'r');
 
 %% Aufgabe 2.1.3 PID Regler
 
-% Bleibende Regelabweichung
-e_inf = 1e-3;
+% Bleibende Regelabweichung fuer die Rampenantwort
+e_inf_rampe = 1e-3;
 
 % Zeitkonstante des Intagralterms
-TI = 1e-3;
+T_I = 1e-3;
 
 % Gesamtregler und offener Kreis
 % R_PID = 
