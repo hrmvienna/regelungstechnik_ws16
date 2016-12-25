@@ -41,16 +41,16 @@ clc         % Das Command Window wird zurueckgesetzt
 % ein hinreichend glattes Signal als Fuehrungsgroesse verwendet werden (man wiederhole
 % dazu auch die ueberlegungen von Abschnitt 4.3.2).
 
-syms s rho r_d T_t V
-
 %% A: Streckenuebertragungsfunktion
+
+syms s rho r_d T_t V xi T
 
 % Uebertragungsfunktion
 
 % Zaehlerpolynom
-z_L = 1.371e06
+z_L = V;
 % Nennerpolynom
-n_L = s^2 + 1600 * s + 9.959e05
+n_L = 1 + 2*xi*(s*T) + (s*T)^2;
 % Uebertragungsfunktion
 G = z_L / n_L
 
@@ -78,24 +78,40 @@ phi_soll = 70 - u_e
 % (5.9) e_inf = lim[s->0]((s*()s^p*n_L(s)) / (s^p*n_L(s) +
 % V*z_L(s)*e^(-sT_t)))*r_d(s)
 
-% Sprungfunktion
-r_d1 = 1/s
-
 e_inf = limit(s * ((s^rho*n_L) / (s^rho*n_L + V*z_L*exp(-s*T_t))) * r_d, s, 0);
 
+% Reglerabweichung fuer die Sprungantwort, _s = sprung
+r_d1 = 1/s;
 % rho = 0
-e_inf1 = subs(e_inf, [r_d, rho], [r_d1, 0])
+e_inf1_s = subs(e_inf, [r_d, rho], [r_d1, 0])
 % rho = 1
-e_inf2 = subs(e_inf, [r_d, rho], [r_d1, 1])
+e_inf2_s = subs(e_inf, [r_d, rho], [r_d1, 1])
 
+% Reglerabweichung fuer die Rampenantwort, -r = rampe
+r_d2 = 1/(s^2);
+% rho = 0
+e_inf1_r = subs(e_inf, [r_d, rho], [r_d2, 0])
+% rho = 1
+e_inf2_r = subs(e_inf, [r_d, rho], [r_d2, 1])
+
+% Schlussfolgerung:
+% e_inf2_s => V != 0 und
+% e_inf2_r => 1/V^2 = 1e-3 fuer Aufgabe 2.1.3
 
 %% C Reglerentwurf: zuerste Phase und Verstaerkung der bekannten Terme 
 % berechnen und danach diese Korrekieren.
 % R_1 = 1/s
+T = 1.002e-3;
+xi = 0.802;
+V = 1.377;
+
+% G(s) = V/(T^2*s^2 + 2*xi*T*s + 1) = (V/T^2) / (s^2 + 2*xi/T + 1/(T^2))
+% => G(s) = V_G / (s^2 + 2*xi/T + 1/(T^2))
+V_G = V/(T^2);
 
 % Uebertragungsfunktion der Strecke, T_ry - Eingang zu Ausgang
-b = [1.371e06];
-a = [1 1600 9.959e05];
+b = [V_G];
+a = [1 2*xi/T 1/(T^2)];
 T_ry = tf(b, a)
 T_dy = tf([857.1 1.616e06], a)
 
