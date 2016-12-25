@@ -97,6 +97,7 @@ e_inf2 = subs(e_inf, [r_d, rho], [r_d1, 1])
 b = [1.371e06];
 a = [1 1600 9.959e05];
 T_ry = tf(b, a)
+T_dy = tf([857.1 1.616e06], a)
 
 % Regler mit allen bisher bekannten Termen, R_1(s) = 1/s
 R_1 = tf(1,[1 0])
@@ -142,7 +143,15 @@ legend('G(s)', 'L1(s)','L2(s)','L3(s)', 'omega_c', 'phi soll');
 
 % Sprungantwort laeuft iwie davon ins unendliche
 figure
-step(L_3)
+step(L_3, 0:1)
+grid on
+
+% Systemantwort auf Rechteckimpulse, man erkennt das der systemausgang
+% immer aufsummiert
+figure
+[u,t] = gensig('square',4,10,0.1);
+lsim(L_3, u, t)
+grid on
 
 % D:
 % E:
