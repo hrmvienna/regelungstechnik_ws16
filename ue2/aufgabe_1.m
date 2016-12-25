@@ -131,6 +131,8 @@ V_R = 1/(abs_L_2)
 R_3 = V_R*R_2;
 L_3 = R_3*T_ry;
 
+%% D: Bodediagramm und ueberpruefen ob die Bedingungen erfuellt sind 
+
 figure
 line([omega_c omega_c], [25, -150])
 hold on
@@ -141,9 +143,14 @@ line([400 600], [phi_soll-180,phi_soll-180])
 grid on
 legend('G(s)', 'L1(s)','L2(s)','L3(s)', 'omega_c', 'phi soll');
 
-% Sprungantwort laeuft iwie davon ins unendliche
+%% D: Sprungantwort des geschlossenen Kreises
+
+% laeuft iwie davon ins unendliche, was auf den Integrator zurueckzufuehren
+% ist.
 figure
 step(L_3, 0:1)
+xlim([0 3e-3])
+ylim([0 1.5])
 grid on
 
 % Systemantwort auf Rechteckimpulse, man erkennt das der systemausgang
@@ -153,9 +160,9 @@ figure
 lsim(L_3, u, t)
 grid on
 
-% D:
-% E:
-% F:
+%% F: Stellegroessenanforderungen
+
+% keine
 
 %% Aufgabe 2.1.2 PI Regler
 
