@@ -73,7 +73,7 @@ e_a_inf = 0
 omega_c = 1.5/t_r
 
 % (5.3) phi[grad] + u_e[%] = 70
-phi = 70 - u_e
+phi_soll = 70 - u_e
 
 % (5.9) e_inf = lim[s->0]((s*()s^p*n_L(s)) / (s^p*n_L(s) +
 % V*z_L(s)*e^(-sT_t)))*r_d(s)
@@ -105,11 +105,44 @@ R_1 = tf(1,[1 0])
 % wobei fuer R(s) ein PI Regler verwendet wurde. (Siehe [5.1 - PI-Reglerentwurf]
 L_1 = R_1*T_ry
 
-figure
-bode(T_ry, L_1)
-grid on
-legend('G(s)', 'L1(s)');
+% Phasenreserve bei L_1(I*omega_c)
+[re_L_1 im_L_1] = nyquist(L_1, omega_c);
+phi_L_1 = atan (im_L_1/re_L_1) * 180/pi % phi = arctan(Im/re)[rad], [degree] = [rad]*180/pi,
+                                              % - 180 um in den richtigen
+                                              % Quadranten zu kommen.
+phi_dif = phi_soll - phi_L_1
 
+% Phase muss um phi_dif = 22.0043 Grad angehoben werden
+% mithilfe des Terms (1 + s*T_2)
+% arctan(omega_c * T_2) = phi_L_1 * pi/180
+T_2 = tan(phi_dif * pi /180)/omega_c;
+R_2 = tf([T_2 1],1) * R_1;
+L_2 = R_2*T_ry;
+
+% Phasenreserve bei L_2(I*omega_c)
+[re_L_2 im_L_2] = nyquist(L_2, omega_c);
+phi_L_2 = atan (im_L_2/re_L_2) * 180/pi
+
+
+% Betrag korregieren, mit dem Verstaerkungsfaktor
+abs_L_2 = sqrt(re_L_2^2 + im_L_2^2) % V_R*abs(L_2(I*omega_c) = 1
+V_R = 1/(abs_L_2)
+R_3 = V_R*R_2;
+L_3 = R_3*T_ry;
+
+figure
+line([omega_c omega_c], [25, -150])
+hold on
+bode(T_ry, L_1, L_2, L_3)
+%hold on
+line([omega_c omega_c], [-90, -160])
+line([400 600], [phi_soll-180,phi_soll-180])
+grid on
+legend('G(s)', 'L1(s)','L2(s)','L3(s)', 'omega_c', 'phi soll');
+
+% Sprungantwort laeuft iwie davon ins unendliche
+figure
+step(L_3)
 
 % D:
 % E:
