@@ -190,14 +190,55 @@ grid on
 % L_PI = 
 % bode(L_PI,'r');
 
-%% Aufgabe 2.1.3 PID Regler
+%% Aufgabe 2.1.3 PID Regler - Lead-Lag-Reglerentwurf
+
+% A: Streckenuebertragungsfunktio
+% gleich wie Aufgabe 2.1
+% B: Kenngroessen berechnen
+% t_r und ue gleich wie Aufgabe 2.1
 
 % Bleibende Regelabweichung fuer die Rampenantwort
 e_inf_rampe = 1e-3;
+V_L = 1/e_inf_rampe;
+
+% V_R_pid*V_G = V_L;
+V_R_pid = V_L/V_G;
+
+%% C: Reglerentwurf: PID Regler: R(s) = Vp * (1 + TI*s)(1 + TD*s)/s(1 + TR*s)
 
 % Zeitkonstante des Intagralterms
 T_I = 1e-3;
 
+Rr_1 = V_R_pid*tf([T_I 1],[1 0]);
+Ll_1 = Rr_1*T_ry
+
+% Phasenreserve bei Ll_1(I*omega_c)
+[re_Ll_1 im_Ll_1] = nyquist(Ll_1, omega_c);
+phi_Ll_1 = atan (im_Ll_1/re_Ll_1) * 180/pi
+abs_L1_1 = sqrt(re_Ll_1^2 + im_Ll_1^2)
+
+% => Betrag und Phase muessen gesenkt werden
+% => Lead-Glied nicht erforderlich, da die Phase schon hoch genug ist
+
+% Lag Glied entwerfen: (Seite 131, 5.31)
+delta_a = 1/abs_L1_1;
+delta_phi = phi_soll - phi_Ll_1;
+
+T_lag = (delta_a*sqrt(1 + tan(delta_phi)^2) - 1)/(omega_c*tan(delta_phi));
+eta_lag = (omega_c*T_lag - tan(delta_phi))/(omega_c*T_lag* (1 + omega_c*T_lag*tan(delta_phi)));
+
+R_lag = tf([T_lag 1],[(T_lag*eta_lag) 1])
+
+Ll_2 = Rr_1*R_lag*T_ry
+
+% Phasenreserve bei Ll_2(I*omega_c)
+[re_Ll_2 im_Ll_2] = nyquist(Ll_2, omega_c);
+phi_Ll_2 = atan (im_Ll_2/re_Ll_2) * 180/pi
+abs_L1_2 = sqrt(re_Ll_2^2 + im_Ll_2^2)
+
+figure
+bode(Ll_1, Ll_2)
+grid on
 % Gesamtregler und offener Kreis
 % R_PID = 
 % L_PID = 
