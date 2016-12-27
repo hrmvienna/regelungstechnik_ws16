@@ -70,4 +70,10 @@ paralist_2 = [5.6     0       1.4   0.46  0.1   12.4e-3 0.152  1.8e-3 32.5e-3 0.
 
 A_num = simplify(subs(A, paralist_1, paralist_2))
 
+% Ruhelagen mit eingesetzten Werten
+simplify(subs(x_M_r.w_P(1), paralist_1, paralist_2))
+simplify(subs(x_M_r.w_P(2), paralist_1, paralist_2))
+% negative Winkelgeschwindigkeit macht keinen sein, also den zweiten Index
+% verwenden (der entsteht durch (w_P)^2 in der Formel)
+
 %x_M_r_simp = simplify(subs(x_M_r, paralist_1, paralist_2))
