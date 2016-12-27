@@ -39,6 +39,7 @@ d_x_m = f_m
 T =  [1 0 0 0 0;    0 1 0 -1 0; 0 0 1 0 0;  0 0 0 0 1];
 
 f_M = T*f_m;
+f_M = subs(f_M, [phi_P phi_GSM], [(phi_GSMP/2) -(phi_GSMP/2)]) % phi_(p, gsm) ersetzen
 d_x_M = f_M
 
 u_M = u_m;
@@ -52,11 +53,9 @@ syms u_GSM_r M_ext_r i_GSM_r phi_GSMP_r w_GSM_r w_P_r
 f_M_r = subs(d_x_M, [i_GSM   phi_GSMP   w_GSM   w_P   u_GSM   M_ext], ...
                       [i_GSM_r phi_GSMP_r w_GSM_r w_P_r u_GSM_r M_ext_r]);
 
-% TODO                  
-%i_GSM_r = solve(f_M_r(1), i_GSM_r);
-%w_GMS_r = simplify(subs(solve(f_M_r(3), w_GSM_r)));
-%w_P_r = solve(subs(f_M_r(4), w_P_r));
 
+% Ruhelagen berechnen
+x_M_r = solve(subs(d_x_M, [u_GSM M_ext], [u_GSM_r M_ext_r]), x_M);
 
 % Systemmatrizen des linearisierten Systems
 A = [diff(f_M, i_GSM) diff(f_M, phi_GSMP) diff(f_M, w_GSM) diff(f_M, w_P)];
@@ -71,3 +70,4 @@ paralist_2 = [5.6     0       1.4   0.46  0.1   12.4e-3 0.152  1.8e-3 32.5e-3 0.
 
 A_num = simplify(subs(A, paralist_1, paralist_2))
 
+%x_M_r_simp = simplify(subs(x_M_r, paralist_1, paralist_2))
