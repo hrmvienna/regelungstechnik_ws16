@@ -97,6 +97,7 @@ e_inf2_r = subs(e_inf, [r_d, rho], [r_d2, 1])
 % Schlussfolgerung:
 % e_inf2_s => V != 0 und
 % e_inf2_r => 1/V^2 = 1e-3 fuer Aufgabe 2.1.3
+% !!! e_inf2_r sollte aber 1/V sein, nicht 1/V^2
 
 %% C Reglerentwurf: zuerste Phase und Verstaerkung der bekannten Terme 
 % berechnen und danach diese Korrekieren.
@@ -105,13 +106,12 @@ T = 1.002e-3;
 xi = 0.802;
 V = 1.377;
 
-% G(s) = V/(T^2*s^2 + 2*xi*T*s + 1) = (V/T^2) / (s^2 + 2*xi/T + 1/(T^2))
-% => G(s) = V_G / (s^2 + 2*xi/T + 1/(T^2))
-V_G = V/(T^2);
+% G(s) = V/(T^2*s^2 + 2*xi*T*s + 1)
+V_G = V;
 
 % Uebertragungsfunktion der Strecke, T_ry - Eingang zu Ausgang
 b = [V_G];
-a = [1 2*xi/T 1/(T^2)];
+a = [(T^2) 2*xi*T 1];
 T_ry = tf(b, a)
 T_dy = tf([857.1 1.616e06], a)
 
@@ -237,7 +237,13 @@ phi_Ll_2 = atan (im_Ll_2/re_Ll_2) * 180/pi
 abs_L1_2 = sqrt(re_Ll_2^2 + im_Ll_2^2)
 
 figure
+line([omega_c omega_c], [25, -50])
+hold on
 bode(Ll_1, Ll_2)
+%hold on
+line([omega_c omega_c], [-90, -160])
+line([400 600], [phi_soll-180,phi_soll-180])
+legend('L1(s)', 'L2(s)')
 grid on
 % Gesamtregler und offener Kreis
 % R_PID = 
