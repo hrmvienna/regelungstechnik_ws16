@@ -42,7 +42,7 @@ function GSMP_S_m(block)
 %           p(13)... i_GSM_0    Anfangszustand i_GSM
 %           p(14)... phi_GSMP_0 Anfangszustand phi_GSMP
 %           p(15)... w_GSM_0    Anfangszustand w_GSM
-%           p(16)... w_P        Anfangszustand w_P
+%           p(16)... w_P_0      Anfangszustand w_P
 %
 % -------------------------------------------------------------------------
 % Abtastzeit (sample time): zeitkontinuierlich (continuous)
@@ -207,6 +207,8 @@ function Derivatives(block)
   
   M_GSM = k_GSM * i_GSM;
   M_rGSM = d_cGSM + d_vGSM * w_GSM;
+  M_kopp = (w_GSM - w_P) * d_GSMP + (phi_GSMP) * c_GSMP;
+  M_P = d_cP + d_vP * w_P + d_qP * (w_P)^2 + M_ext;
   
   % Berechnen der Zeitableitungen der Zustaende
   dx(1) = (1/L_GSM)*(u_GSM - R_GSM*i_GSM - k_GSM*w_GSM);

@@ -10,6 +10,10 @@ y2 = [M_GSM M_kopp].'
 
 u_GSM_r = 5.6;
 M_ext_r = 0;
+i_GSM_0 = 0;
+phi_GSMP_0 = 0;
+w_GSM_0 = 0;
+w_P_0 = 0;
 
 % Parameter
 L_GSM   = 1.4;
