@@ -112,7 +112,7 @@ V_G = V;
 % Uebertragungsfunktion der Strecke, T_ry - Eingang zu Ausgang
 b = [V_G];
 a = [(T^2) 2*xi*T 1];
-T_ry = tf(b, a)
+Gs = tf(b, a)
 T_dy = tf([857.1 1.616e06], a)
 
 % Regler mit allen bisher bekannten Termen, R_1(s) = 1/s
@@ -120,7 +120,7 @@ R_1 = tf(1,[1 0])
 
 % Uebertragungsfunktion der Regelstrecke L_1(s) = R_1(s)*G(s)
 % wobei fuer R(s) ein PI Regler verwendet wurde. (Siehe [5.1 - PI-Reglerentwurf]
-L_1 = R_1*T_ry
+L_1 = R_1*Gs
 
 % Phasenreserve bei L_1(I*omega_c)
 [re_L_1 im_L_1] = nyquist(L_1, omega_c);
@@ -134,7 +134,7 @@ phi_dif = phi_soll - phi_L_1
 % arctan(omega_c * T_2) = phi_L_1 * pi/180
 T_2 = tan(phi_dif * pi /180)/omega_c;
 R_2 = tf([T_2 1],1) * R_1;
-L_2 = R_2*T_ry;
+L_2 = R_2*Gs;
 
 % Phasenreserve bei L_2(I*omega_c)
 [re_L_2 im_L_2] = nyquist(L_2, omega_c);
@@ -145,14 +145,14 @@ phi_L_2 = atan (im_L_2/re_L_2) * 180/pi
 abs_L_2 = sqrt(re_L_2^2 + im_L_2^2) % V_R*abs(L_2(I*omega_c) = 1
 V_R = 1/(abs_L_2)
 R_3 = V_R*R_2;
-L_3 = R_3*T_ry;
+L_3 = R_3*Gs;
 
 %% D: Bodediagramm und ueberpruefen ob die Bedingungen erfuellt sind 
 
 figure
 line([omega_c omega_c], [25, -150])
 hold on
-bode(T_ry, L_1, L_2, L_3)
+bode(Gs, L_1, L_2, L_3)
 %hold on
 line([omega_c omega_c], [-90, -160])
 line([400 600], [phi_soll-180,phi_soll-180])
@@ -161,19 +161,20 @@ legend('G(s)', 'L1(s)','L2(s)','L3(s)', 'omega_c', 'phi soll');
 
 %% D: Sprungantwort des geschlossenen Kreises
 
-% laeuft iwie davon ins unendliche, was auf den Integrator zurueckzufuehren
-% ist.
+% Geschlossener Kreis
+T_ry = L_3 / (1 + L_3);
+
 figure
-step(L_3, 0:1)
-xlim([0 3e-3])
-ylim([0 1.5])
+step(T_ry)
+legend('Try')
 grid on
 
 % Systemantwort auf Rechteckimpulse, man erkennt das der systemausgang
 % immer aufsummiert
 figure
 [u,t] = gensig('square',4,10,0.1);
-lsim(L_3, u, t)
+lsim(T_ry, u, t)
+legend('Try')
 grid on
 
 %% F: Stellegroessenanforderungen
