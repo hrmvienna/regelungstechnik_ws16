@@ -119,6 +119,7 @@ a = [(T^2) 2*xi*T 1];
 c = [857.1/cc 1.616e06/cc];
 Gs = tf(b, a)
 Gd = tf(c, a)
+Gsys = [Gs, Gd];
 
 % Regler mit allen bisher bekannten Termen, R_1(s) = 1/s
 R_1 = tf(1,[1 0])
@@ -190,7 +191,7 @@ grid on
 % Verzoegerungsglied 2-ter Ordnung ist?
 
 % Gesamtregler und offener Kreis
-% R_PI = 
+% R_PI = 369.8 * (0.0008086 s + 1) / s
 % L_PI = 
 % bode(L_PI,'r');
 
@@ -250,11 +251,28 @@ line([400 600], [phi_soll-180,phi_soll-180])
 legend('L1(s)', 'L2(s)')
 grid on
 % Gesamtregler und offener Kreis
-% R_PID = 
+% R_PID = 726.2 * (0.001 s + 1) * (0.01274 s + 1) / s*(0.02618 s + 1)
 % L_PID = 
 % bode(L_PID,'g');
 
-%% Aufgabe 2.1.4
+%% Aufgabe 2.1.4: Geschlossener Kreis des lin. Systems als Blockschaltbild
+
+% Blockschaltbild
+% siehe aufgabe_1_4.slx
+
+% Fuehrungsuebertragungsfunktion Try
+T_ry = L_3 / (1 + L_3)
+
+% Stoeruebertragungsfunktion Tdy
+T_dy = Gd / (1 + L_3)
+
+% Sprungantworten
+figure
+step(T_ry, T_dy)
+legend('Try', 'Tdy')
+grid on
+
+%% Aufgabe 2.1.x
 % Kontrolle des Verhaltens des geschlossenen Kreise
 
 T = 0.05;   % Simulationsdauer
