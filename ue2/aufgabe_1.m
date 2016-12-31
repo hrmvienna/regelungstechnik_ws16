@@ -209,7 +209,7 @@ V_R_pid = V_L/V_G;
 T_I = 1e-3;
 
 Rr_1 = V_R_pid*tf([T_I 1],[1 0]);
-Ll_1 = Rr_1*T_ry
+Ll_1 = Rr_1*Gs
 
 % Phasenreserve bei Ll_1(I*omega_c)
 [re_Ll_1 im_Ll_1] = nyquist(Ll_1, omega_c);
@@ -221,14 +221,14 @@ abs_L1_1 = sqrt(re_Ll_1^2 + im_Ll_1^2)
 
 % Lag Glied entwerfen: (Seite 131, 5.31)
 delta_a = 1/abs_L1_1;
-delta_phi = phi_soll - phi_Ll_1;
+delta_phi = (phi_soll - phi_Ll_1) * pi/180; % [rad]
 
 T_lag = (delta_a*sqrt(1 + tan(delta_phi)^2) - 1)/(omega_c*tan(delta_phi));
 eta_lag = (omega_c*T_lag - tan(delta_phi))/(omega_c*T_lag* (1 + omega_c*T_lag*tan(delta_phi)));
 
 R_lag = tf([T_lag 1],[(T_lag*eta_lag) 1])
 
-Ll_2 = Rr_1*R_lag*T_ry
+Ll_2 = Rr_1*R_lag*Gs
 
 % Phasenreserve bei Ll_2(I*omega_c)
 [re_Ll_2 im_Ll_2] = nyquist(Ll_2, omega_c);
