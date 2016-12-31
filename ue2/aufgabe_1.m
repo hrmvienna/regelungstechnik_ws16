@@ -45,17 +45,21 @@ clc         % Das Command Window wird zurueckgesetzt
 
 syms s rho r_d T_t V xi T
 
+cc = 9.959e05;
+
 % Uebertragungsfunktion
 
 % Zaehlerpolynom
 z_L = V;
+% Zaehlerpolynom Stoerfunktion
+z_Ld = (857.1/cc) * s + (1.616e06/cc);
 % Nennerpolynom
 n_L = 1 + 2*xi*(s*T) + (s*T)^2;
 % Uebertragungsfunktion
 G = z_L / n_L
 
 % Stoerfunktion
-G_d = (857.1 * s + 1.616e06) / n_L % TODO: Stimmt 1.616  * >10^6<?
+G_d = z_Ld / n_L
 
 % Anforderungen
 t_r=3e-3
@@ -112,8 +116,9 @@ V_G = V;
 % Uebertragungsfunktion der Strecke, T_ry - Eingang zu Ausgang
 b = [V_G];
 a = [(T^2) 2*xi*T 1];
+c = [857.1/cc 1.616e06/cc];
 Gs = tf(b, a)
-Gd = tf([857.1 1.616e06], a) % TODO: anpassend
+Gd = tf(c, a)
 
 % Regler mit allen bisher bekannten Termen, R_1(s) = 1/s
 R_1 = tf(1,[1 0])
