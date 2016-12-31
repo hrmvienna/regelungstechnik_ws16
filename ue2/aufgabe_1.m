@@ -272,17 +272,49 @@ step(T_ry, T_dy)
 legend('Try', 'Tdy')
 grid on
 
-%% Aufgabe 2.1.x
-% Kontrolle des Verhaltens des geschlossenen Kreise
+%% Aufgabe 2.1.5: Simulieren der implementierten Regler
 
-T = 0.05;   % Simulationsdauer
-figure;
-subplot(3,1,1);hold on;grid on;
-title('Sprungantwort Fuehrungsuebertragungsfunktion')
+% Parameter aus Esys_Parameter.m von Aufgabe 1.4:
+R1      = 625;    % Widerstand in Ohm
+R2      = 3500;   % Widerstand in Ohm
+K       = 3;      % Spannungsverstaerkung
+C1_ref  = 1e-6;   % Referenz-Kapazitaetswert auf Kennlinie von C1 in F
+UC1_ref = -10;    % Referenz-Spannungswert auf Kennlinie von C1 in V
+kC1     = 800e-9; % Steigung der Kennlinie von C1 in F/V
+C2      = 1e-6;   % Kapazitaet in F
+UeR = 5;
+UsR = 5;
+te = 1;      % Einschaltzeitpunkt in Sekunden
+Ue = 7;      % Endwert des Sprunges in Volt
+Usinus = 0.1; % Amplitude des Sinus in Volt
+we     = 10;  % Winkelfrequenz des Sinus in rad/s
+ts = 3;     % Einschaltzeitpunkt in Sekunden
+Us = 1;     % Endwert des Sprunges in Volt
+UC1R = -(K*R2*UeR - R1*UsR - 2*R2*UeR + K*R1*UsR + K*R2*UsR)/(R1 + 2*R2);
+UC2R = (R2*UeR + R1*UsR + R2*UsR)/(R1 + 2*R2);
+UaR  = K*UC2R;
+dQ1  = C1_ref + UC1R*kC1 - UC1_ref*kC1; % Erste Ableitung von Q1 nach UC1
+ddQ1 = kC1; % Zweite Ableitung von Q1 nach UC1
+C1 = dQ1;
 
-subplot(3,1,2);hold on;grid on;
-title('Sprungantwort Stoeruebertragungsfunktion')
+A11 = -(R1 + R2)/(C1*R1*R2);
+A12 = -(K*R1 - R1 + K*R2)/(C1*R1*R2);
+A21 = 1/(C2*R2);
+A22 = (K - 2)/(C2*R2);
 
-subplot(3,1,3);hold on;grid on;
-title('Rampenantwort Stoeruebertragungsfunktion')
+A  = [A11,A12;A21,A22];
+bu = [1/(C1*R1);0];
+bd = [0;1/(C2*R2)];
+c  = [0, K];
+du = [0];
+dd = [0];
+
+%% Aufgabe 2.1.6: Messrauschen
+
+% TODO: Verhalten mit und ohne Messrauschen beschreiben
+
+%% Aufgabe 2.1.7: Steigungsbegraenzung
+
+% TODO: Verhalten mit Steigungsbegrenzung untersuchen.
+
 
