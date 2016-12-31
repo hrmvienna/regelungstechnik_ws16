@@ -55,14 +55,14 @@ n_L = 1 + 2*xi*(s*T) + (s*T)^2;
 G = z_L / n_L
 
 % Stoerfunktion
-G_d = (857.1 * s + 1.616e06) / n_L
+G_d = (857.1 * s + 1.616e06) / n_L % TODO: Stimmt 1.616  * >10^6<?
 
 % Anforderungen
 t_r=3e-3
 u_e=5
 e_a_inf = 0
 
-%% B: Kenngroessen berechne: Durchtrittsfrequenz und Phasenreserve
+%% B: Kenngroessen berechnen: Durchtrittsfrequenz und Phasenreserve
 % Der Regler muss mind. eine Polstelle bei s = 0 haben, da der Regelfehler
 % fuer die Sprungantwort e_inf = 0. (5.10, Seite 125)
 
@@ -113,7 +113,7 @@ V_G = V;
 b = [V_G];
 a = [(T^2) 2*xi*T 1];
 Gs = tf(b, a)
-T_dy = tf([857.1 1.616e06], a)
+Gd = tf([857.1 1.616e06], a) % TODO: anpassend
 
 % Regler mit allen bisher bekannten Termen, R_1(s) = 1/s
 R_1 = tf(1,[1 0])
@@ -166,15 +166,13 @@ T_ry = L_3 / (1 + L_3);
 
 figure
 step(T_ry)
-legend('Try')
-grid on
-
-% Systemantwort auf Rechteckimpulse, man erkennt das der systemausgang
-% immer aufsummiert
-figure
-[u,t] = gensig('square',4,10,0.1);
-lsim(T_ry, u, t)
-legend('Try')
+% Ueberschwingung einzeichnen
+line([0, 1], [1.05, 1.05])
+% tr so halbwegs einzeichnen, wie Abbildung 5.2.
+a = 0.002; % Wendepunkt, vom Plot abgelesen (anklicken)
+line([a-t_r/2, a-t_r/2], [0, 1])
+line([a+t_r/2, a+t_r/2], [0, 1])
+legend('Try', 'ue', 'tr')
 grid on
 
 %% F: Stellegroessenanforderungen
@@ -191,9 +189,9 @@ grid on
 % L_PI = 
 % bode(L_PI,'r');
 
-%% Aufgabe 2.1.3 PID Regler - Lead-Lag-Reglerentwurf
+%% Aufgabe 2.1.3 PID Regler - Aehnlich: Lead-Lag-Reglerentwurf
 
-% A: Streckenuebertragungsfunktio
+% A: Streckenuebertragungsfunktion
 % gleich wie Aufgabe 2.1
 % B: Kenngroessen berechnen
 % t_r und ue gleich wie Aufgabe 2.1
