@@ -45,7 +45,7 @@ clc         % Das Command Window wird zurueckgesetzt
 
 syms s rho r_d T_t V xi T
 
-cc = 9.959e05;
+cc = 9.959e05; % = T^2, herausgehobener Term, zwecks Umformen
 
 % Uebertragungsfunktion
 
@@ -113,18 +113,18 @@ V = 1.377;
 % G(s) = V/(T^2*s^2 + 2*xi*T*s + 1)
 V_G = V;
 
-% Uebertragungsfunktion der Strecke, T_ry - Eingang zu Ausgang
+% Uebertragungsfunktion der Strecke, G(s)[Gs] und Gd(s)
 b = [V_G];
 a = [(T^2) 2*xi*T 1];
 c = [857.1/cc 1.616e06/cc];
 Gs = tf(b, a)
 Gd = tf(c, a)
-Gsys = [Gs, Gd];
+Gsys = [Gs, Gd]; % Uebertragungsfunktioen Eingang/Stoerung zum Ausgang
 
 % Regler mit allen bisher bekannten Termen, R_1(s) = 1/s
 R_1 = tf(1,[1 0])
 
-% Uebertragungsfunktion der Regelstrecke L_1(s) = R_1(s)*G(s)
+% Uebertragungsfunktion des offenen Regelkreises L_1(s) = R_1(s)*G(s)
 % wobei fuer R(s) ein PI Regler verwendet wurde. (Siehe [5.1 - PI-Reglerentwurf]
 L_1 = R_1*Gs
 
@@ -135,7 +135,7 @@ phi_L_1 = atan (im_L_1/re_L_1) * 180/pi % phi = arctan(Im/re)[rad], [degree] = [
                                               % Quadranten zu kommen.
 phi_dif = phi_soll - phi_L_1
 
-% Phase muss um phi_dif = 22.0043 Grad angehoben werden
+% Phase muss um phi_dif = 22.0143 Grad angehoben werden
 % mithilfe des Terms (1 + s*T_2)
 % arctan(omega_c * T_2) = phi_L_1 * pi/180
 T_2 = tan(phi_dif * pi /180)/omega_c;
@@ -163,6 +163,7 @@ bode(Gs, L_1, L_2, L_3)
 line([omega_c omega_c], [-90, -160])
 line([400 600], [phi_soll-180,phi_soll-180])
 grid on
+title('2.1: Bode-Diagramm von G(s) und der offfene Regelkreise')
 legend('G(s)', 'L1(s)','L2(s)','L3(s)', 'omega_c', 'phi soll');
 
 %% D: Sprungantwort des geschlossenen Kreises
@@ -173,11 +174,13 @@ T_ry = L_3 / (1 + L_3);
 figure
 step(T_ry)
 % Ueberschwingung einzeichnen
-line([0, 1], [1.05, 1.05])
+line([0, 1], [1.05, 1.05], 'Color', 'r')
 % tr so halbwegs einzeichnen, wie Abbildung 5.2.
 a = 0.002; % Wendepunkt, vom Plot abgelesen (anklicken)
-line([a-t_r/2, a-t_r/2], [0, 1])
-line([a+t_r/2, a+t_r/2], [0, 1])
+line([a-t_r/2, a+t_r/2], [0, 1], 'Color','k')
+line([a-t_r/2, a-t_r/2], [0, 1], 'Color','g')
+line([a+t_r/2, a+t_r/2], [0, 1], 'Color','g')
+title('Sprungantwort des geschlossenen Kreises L3(s)')
 legend('Try', 'ue', 'tr')
 grid on
 
