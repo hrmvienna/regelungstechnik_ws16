@@ -193,10 +193,12 @@ grid on
 % Ist das FKL-Verfahren ein exaktes Entwurfsverfahren, wenn die Strecke ein
 % Verzoegerungsglied 2-ter Ordnung ist?
 
-% Gesamtregler und offener Kreis
-% R_PI = 369.8 * (0.0008086 s + 1) / s
-% L_PI = 
-% bode(L_PI,'r');
+% Die Strecke ist ein Modell/Abbild der Wirklichkeit und ist dahe nicht
+% 100%ig exakt. Des Weiteren baut das FKL-Verfahren auf numerisch
+% errechneten Werten (Verhaeltnis omega_c zu t_r, Ueberschwingen) auf, und
+% enthaelt somit Ungenauigkeiten, somit ist das Verfahren nicht exakt.
+
+% TODO?
 
 %% Aufgabe 2.1.3 PID Regler - Aehnlich: Lead-Lag-Reglerentwurf
 
