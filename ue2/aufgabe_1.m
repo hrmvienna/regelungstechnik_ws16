@@ -237,8 +237,10 @@ delta_phi = (phi_soll - phi_Ll_1) * pi/180; % [rad]
 T_lag = (delta_a*sqrt(1 + tan(delta_phi)^2) - 1)/(omega_c*tan(delta_phi));
 eta_lag = (omega_c*T_lag - tan(delta_phi))/(omega_c*T_lag* (1 + omega_c*T_lag*tan(delta_phi)));
 
+% Lag Regler - senkt Betrag und Phase
 R_lag = tf([T_lag 1],[(T_lag*eta_lag) 1])
 
+% offener Kreis
 Ll_2 = Rr_1*R_lag*Gs
 
 % Phasenreserve bei Ll_2(I*omega_c)
@@ -253,12 +255,9 @@ bode(Ll_1, Ll_2)
 %hold on
 line([omega_c omega_c], [-90, -160])
 line([400 600], [phi_soll-180,phi_soll-180])
+title('Bode-Diagramm fuer den offenen Kreis L1(s) und L2(s) mit PID-Regler')
 legend('L1(s)', 'L2(s)')
 grid on
-% Gesamtregler und offener Kreis
-% R_PID = 726.2 * (0.001 s + 1) * (0.01274 s + 1) / s*(0.02618 s + 1)
-% L_PID = 
-% bode(L_PID,'g');
 
 %% Aufgabe 2.1.4: Geschlossener Kreis des lin. Systems als Blockschaltbild
 
