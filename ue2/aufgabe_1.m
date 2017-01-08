@@ -264,20 +264,19 @@ grid on
 % Blockschaltbild
 % siehe aufgabe_1_4.slx
 
-% TODO: fragen ob man den PI oder PID Regeler verwenden sollen, zurzeit
-% nehmen wird den PI Regler aus Aufgabe 2.1.1
-
 % Fuehrungsuebertragungsfunktion Try
-T_ry = L_3 / (1 + L_3)
+T_ry_pi = L_3 / (1 + L_3)
+T_ry_pid = Ll_2 / (1 + Ll_2)
 
 % Stoeruebertragungsfunktion Tdy
-T_dy = Gd / (1 + L_3)
+T_dy_pi = Gd / (1 + L_3)
+T_dy_pid = Gd / (1 + Ll_2)
 
 % Sprungantworten
 figure
-step(T_ry, T_dy)
+step(T_ry_pi, T_dy_pi, T_ry_pid, T_dy_pid)
 title('Sprungantworten fuer die Fuehrungs/Stoeruebertragungsfunktion')
-legend('Try', 'Tdy')
+legend('Try PI', 'Tdy PI', 'Try PID', 'Tdy PID')
 grid on
 
 %% Aufgabe 2.1.5: Simulieren der implementierten Regler
