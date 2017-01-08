@@ -81,6 +81,9 @@ r_num = double(simplify(subs(r_num, paralist_1, paralist_2)));
 % negative Winkelgeschwindigkeit macht keinen sein, also den zweiten Index
 % verwenden (der entsteht durch (w_P)^2 in der Formel)
 
+% TODO: Eigenwerte sind anders als in der Angabe, Problemsuche! Evtl Tutor
+% fragen
+
 % Eigenwerte der Systemmatrix A berechnen
 A_num = double(simplify(subs(subs(A, w_P_r, x_M_r.w_P(2)), paralist_1, paralist_2)));
 eigen_vals = eig(A_num)
