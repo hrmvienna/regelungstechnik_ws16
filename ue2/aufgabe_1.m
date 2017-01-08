@@ -264,19 +264,28 @@ grid on
 % Blockschaltbild
 % siehe aufgabe_1_4.slx
 
+% Regler
+R_PI = R_3;
+R_PID = Rr_1*R_lag;
+
+% offene Kreise
+L_PI = R_PI*Gs;
+L_PID = R_PID*Gs;
+
 % Fuehrungsuebertragungsfunktion Try
-T_ry_pi = L_3 / (1 + L_3)
-T_ry_pid = Ll_2 / (1 + Ll_2)
+T_ry_pi = L_PI / (1 + L_PI)
+T_ry_pid = L_PID / (1 + L_PID)
 
 % Stoeruebertragungsfunktion Tdy
-T_dy_pi = Gd / (1 + L_3)
-T_dy_pid = Gd / (1 + Ll_2)
+T_dy_pi = Gd / (1 + L_PI)
+T_dy_pid = Gd / (1 + L_PID)
 
 % Sprungantworten
 figure
 step(T_ry_pi, T_dy_pi, T_ry_pid, T_dy_pid)
 title('Sprungantworten fuer die Fuehrungs/Stoeruebertragungsfunktion')
 legend('Try PI', 'Tdy PI', 'Try PID', 'Tdy PID')
+xlim([0 0.05])
 grid on
 
 %% Aufgabe 2.1.5: Simulieren der implementierten Regler
