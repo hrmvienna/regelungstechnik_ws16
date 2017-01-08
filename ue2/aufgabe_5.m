@@ -11,6 +11,7 @@ syms L_GSM R_GSM k_GSM J_GSM d_cGSM d_vGSM u_GSM
 syms J_P d_cP d_vP d_qP
 % GSMP
 syms c_GSMP d_GSMP phi_GSMP
+Ta = 50e-03;
 
 % Parameterliste
 paralist_1 = [u_GSM_r M_ext_r L_GSM R_GSM k_GSM J_GSM   d_cGSM d_vGSM J_P     d_cP  d_vP   d_qP c_GSMP d_GSMP];
@@ -41,8 +42,14 @@ tf_sys = tf(sys);
 
 % Uebertragungsfunktionen T_ry und T_dy, wobei r der Eingang und d die
 % Stoerung ist
-Gu = tf_sys(1)
-Gd = tf_sys(2)
+Gu = tf_sys(1);
+Gd = tf_sys(2);
+
+% Zeitdiskrete Uebertragungsfunktion T_ry und T_dy
+sys_q = c2d(sys, Ta, 'zoh');
+tf_q = tf(sys_q);
+Gq = tf_q(1)
+Gqd = tf_q(2)
 
 %% Reglerentwurf
 % Sollsprung delta_r = 20 rad s^-1
@@ -59,15 +66,15 @@ u_gsm_min = 0;
 u_gsm_max = 12;
 
 % Quadratischer Term des Reglers aus den konj.compl. Polstellen errechnen
-pole_sys = pole(sys);
+pole_sys = pole(sys_q);
 p_con1 = pole_sys(1);
 p_con2 = pole_sys(2);
 syms x
-poly = simplify(((x - p_con1))*(x - (p_con2)));
-xi2T = 1626954853497643/1125899906842624;
-Tsq  = 382699032744171196714245354617545/5070602400912917605986812821504;
-T = sqrt(Tsq)
-xi = xi2T /(2*T)
+coeff_p = coeffs(simplify(((x - p_con1))*(x - (p_con2))), x);
+xi2T = coeff_p(2);
+Tsq  = coeff_p(1);
+T = double(sqrt(Tsq))
+xi = double(xi2T /(2*T))
 
 % Regler aus den bekannten Termen
-Rq_1 = tf([(T^2) (2*xi*T) 1], [1 0])
+Rq_1 = tf([(T^2) (2*xi*T) 1], [1 0], Ta)
