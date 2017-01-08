@@ -291,8 +291,10 @@ grid on
 %% Aufgabe 2.1.5: Simulieren der implementierten Regler
 
 % Parameter aus Esys_Parameter.m von Aufgabe 1.4:
-R1      = 625;    % Widerstand in Ohm
+R1      = 625;    % Widerstand in 
+R_1 = R1;
 R2      = 3500;   % Widerstand in Ohm
+R_2 = R2;
 K       = 3;      % Spannungsverstaerkung
 C1_ref  = 1e-6;   % Referenz-Kapazitaetswert auf Kennlinie von C1 in F
 UC1_ref = -10;    % Referenz-Spannungswert auf Kennlinie von C1 in V
@@ -300,11 +302,11 @@ kC1     = 800e-9; % Steigung der Kennlinie von C1 in F/V
 C2      = 1e-6;   % Kapazitaet in F
 UeR = 5;
 UsR = 5;
-te = 1;      % Einschaltzeitpunkt in Sekunden
+te = 0.015;      % Einschaltzeitpunkt in Sekunden
 Ue = 7;      % Endwert des Sprunges in Volt
 Usinus = 0.1; % Amplitude des Sinus in Volt
 we     = 10;  % Winkelfrequenz des Sinus in rad/s
-ts = 3;     % Einschaltzeitpunkt in Sekunden
+ts = 0.05;     % Einschaltzeitpunkt in Sekunden
 Us = 1;     % Endwert des Sprunges in Volt
 UC1R = -(K*R2*UeR - R1*UsR - 2*R2*UeR + K*R1*UsR + K*R2*UsR)/(R1 + 2*R2);
 UC2R = (R2*UeR + R1*UsR + R2*UsR)/(R1 + 2*R2);
@@ -325,12 +327,24 @@ c  = [0, K];
 du = [0];
 dd = [0];
 
+% Ergebnisse:
+% Der linearisierte Regelkreis ist stabil. Die Anforderungen <sind|sind nicht>
+% (TODO) erfuellt. TODO: Verhalten Eingangssprung und Stoersprung
+% Der nicht linearisierte Regelkreis ist nicht stabil, der Ausgang  laueft
+% sehr schnell gegen minus unendlich.
+
 %% Aufgabe 2.1.6: Messrauschen
 
 % TODO: Verhalten mit und ohne Messrauschen beschreiben
+
+% Mit Messrauschen laeuft das nichtlineare System langsamer gegen
+% +unendlich.
 
 %% Aufgabe 2.1.7: Steigungsbegraenzung
 
 % TODO: Verhalten mit Steigungsbegrenzung untersuchen.
 
+% Vorteile bei der begrenzung  der Aenderungsrate:
+% Die Dynamik der Aktoren muss nicht so gross sein, somit koennen
+% guenstigere Aktoren verwendet werden.
 
