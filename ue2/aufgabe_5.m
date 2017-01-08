@@ -4,7 +4,7 @@ clear all; close all; clc
 %  Systems im Arbeitspunkt aus Aufgabe 2.3
 
 % Zustandsgroessen
-syms delta_phi_GSMP delta_w_GSM delta_w_P w_P_r
+syms delta_phi_GSMP delta_w_GSM delta_w_P w_P_r u_GSM_r M_ext_r
 % GSM
 syms L_GSM R_GSM k_GSM J_GSM d_cGSM d_vGSM u_GSM
 % P
@@ -37,12 +37,12 @@ bu = double(simplify(subs(bu, paralist_1, paralist_2)));
 bd = double(simplify(subs(bd, paralist_1, paralist_2)));
 
 sys = ss(A, [bu, bd], ct, d);
-tf = tf(sys);
+tf_sys = tf(sys);
 
 % Uebertragungsfunktionen T_ry und T_dy, wobei r der Eingang und d die
 % Stoerung ist
-Gu = tf(1)
-Gd = tf(2)
+Gu = tf_sys(1)
+Gd = tf_sys(2)
 
 %% Reglerentwurf
 % Sollsprung delta_r = 20 rad s^-1
@@ -58,6 +58,16 @@ u_e = 0;
 u_gsm_min = 0;
 u_gsm_max = 12;
 
-% Reglerstruktur:
-% TODO
+% Quadratischer Term des Reglers aus den konj.compl. Polstellen errechnen
+pole_sys = pole(sys);
+p_con1 = pole_sys(1);
+p_con2 = pole_sys(2);
+syms x
+poly = simplify(((x - p_con1))*(x - (p_con2)));
+xi2T = 1626954853497643/1125899906842624;
+Tsq  = 382699032744171196714245354617545/5070602400912917605986812821504;
+T = sqrt(Tsq)
+xi = xi2T /(2*T)
 
+% Regler aus den bekannten Termen
+Rq_1 = tf([(T^2) (2*xi*T) 1], [1 0])
