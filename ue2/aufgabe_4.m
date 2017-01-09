@@ -16,7 +16,7 @@ w_GSM_0 = 0;
 w_P_0 = 0;
 
 % Parameter
-L_GSM   = 1.4;
+L_GSM   = 1.4e-3;
 R_GSM   = 0.46;
 k_GSM   = 0.1;
 J_GSM   = 12.4e-03;
