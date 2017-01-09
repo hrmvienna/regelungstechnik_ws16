@@ -288,6 +288,8 @@ legend('Try PI', 'Tdy PI', 'Try PID', 'Tdy PID')
 xlim([0 0.05])
 grid on
 
+% Rampenanwort TODO
+
 %% Aufgabe 2.1.5: Simulieren der implementierten Regler
 
 % Parameter aus Esys_Parameter.m von Aufgabe 1.4:
