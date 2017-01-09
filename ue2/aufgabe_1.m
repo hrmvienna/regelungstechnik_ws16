@@ -166,7 +166,7 @@ grid on
 title('2.1: Bode-Diagramm von G(s) und der offfene Regelkreise')
 legend('G(s)', 'L1(s)','L2(s)','L3(s)', 'omega_c', 'phi soll');
 
-%% D: Sprungantwort des geschlossenen Kreises
+%% E: Sprungantwort des geschlossenen Kreises
 
 % Geschlossener Kreis
 T_ry = L_3 / (1 + L_3);
