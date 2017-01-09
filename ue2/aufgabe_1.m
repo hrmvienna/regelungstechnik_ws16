@@ -198,7 +198,8 @@ grid on
 % errechneten Werten (Verhaeltnis omega_c zu t_r, Ueberschwingen) auf, und
 % enthaelt somit Ungenauigkeiten, somit ist das Verfahren nicht exakt.
 
-% TODO?
+% TODO - Tutor meint das unter Umstaenden stabil ist; im Skritpum
+% nachschaun
 
 %% Aufgabe 2.1.3 PID Regler - Aehnlich: Lead-Lag-Reglerentwurf
 
