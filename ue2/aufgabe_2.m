@@ -70,7 +70,7 @@ delta_y = ct*delta_x;
 
 % Parameterliste
 paralist_1 = [u_GSM_r M_ext_r L_GSM R_GSM k_GSM J_GSM   d_cGSM d_vGSM J_P     d_cP  d_vP   d_qP c_GSMP d_GSMP];
-paralist_2 = [5.6     0       1.4   0.46  0.1   12.4e-3 0.152  1.8e-3 32.5e-3 0.169 2.7e-3 1e-4 0.6822 1e-5];
+paralist_2 = [5.6     0       1.4e-3   0.46  0.1   12.4e-3 0.152  1.8e-3 32.5e-3 0.169 2.7e-3 1e-4 0.6822 1e-5];
 
 % Ruhelagen mit eingesetzten Werten
 r_num = [x_M_r.i_GSM(1)   x_M_r.i_GSM(2); ...
