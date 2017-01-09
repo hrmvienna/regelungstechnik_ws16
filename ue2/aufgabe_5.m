@@ -96,7 +96,7 @@ Rq_komp = tf([(T^2) (2*xi*T) 1], [1], Ta);
 Rq_1 = tf([1], [1 0], Ta)*Rq_komp
 Lq_1 = Rq_1*Gq;
 
-% Phasenreserve bei L_1(I*omega_c)
+% Phasenreserve bei Lq_1(I*omega_c)
 [re_Lq_1 im_Lq_1] = nyquist(Lq_1, omega_c);
 phi_Lq_1 = atan (im_Lq_1/re_Lq_1) * 180/pi % phi = arctan(Im/re)[rad], [degree] = [rad]*180/pi,
                                               % - 180 um in den richtigen
@@ -104,5 +104,23 @@ phi_Lq_1 = atan (im_Lq_1/re_Lq_1) * 180/pi % phi = arctan(Im/re)[rad], [degree] 
 phi_dif = -180 + phi_soll - phi_Lq_1
 
 % Phase muss um -49.4686 gesenkt werden
+% mithilfe des Terms (1 + s*T_2)
+% arctan(omega_c * T_2) = phi_L_1 * pi/180
+T_I = tan(phi_dif * pi /180)/omega_c;
+Rq_2 = tf([T_I 1], 1, Ta) * Rq_1;
+Lq_2 = Rq_2*Gq;
 
-bode (Rq_1*Gq)
+% Phasenreserve bei Lq_2(I*omega_c)
+[re_Lq_2 im_Lq_2] = nyquist(Lq_2, omega_c);
+phi_Lq_2 = atan (im_Lq_2/re_Lq_2) * 180/pi;
+
+figure
+line([omega_c omega_c], [25, -150])
+hold on
+bode(Gq, Lq_1, Lq_2)
+%hold on
+line([omega_c omega_c], [-90, -160])
+line([1 2], [-130,-130])
+grid on
+title('2.1: Bode-Diagramm von G#(q) und der offfene Regelkreise')
+legend('G#(q)', 'L1(q)','L2(q)', 'omega_c', 'phi soll');
