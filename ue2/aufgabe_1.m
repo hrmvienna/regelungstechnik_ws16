@@ -199,7 +199,7 @@ grid on
 % enthaelt somit Ungenauigkeiten, somit ist das Verfahren nicht exakt.
 
 % TODO - Tutor meint das unter Umstaenden stabil ist; im Skritpum
-% nachschaun
+% nachschaun - Skript Seite 123
 
 %% Aufgabe 2.1.3 PID Regler - Aehnlich: Lead-Lag-Reglerentwurf
 
