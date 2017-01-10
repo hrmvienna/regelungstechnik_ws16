@@ -10,10 +10,6 @@ y2 = [M_GSM M_kopp].'
 
 u_GSM_r = 5.6;
 M_ext_r = 0;
-i_GSM_0 = 0;
-phi_GSMP_0 = 0;
-w_GSM_0 = 0;
-w_P_0 = 0;
 
 % Parameter
 L_GSM   = 1.4e-3;
@@ -66,6 +62,12 @@ w_P_r_red = -(R_GSM*d_vP + R_GSM*d_vGSM - (k_GSM^4 + R_GSM^2*d_vP^2 + ...
     2*R_GSM^2*d_vP*d_vGSM + 2*R_GSM*d_vP*k_GSM^2 + ...
     2*R_GSM*d_vGSM*k_GSM^2 + 4*R_GSM*d_qP*k_GSM*u_GSM_r)^(1/2) + ...
     k_GSM^2)/(2*R_GSM*d_qP);
+
+% Anfangsbedingungen fuers Nicht-Lineare System
+i_GSM_0 = i_GSM_r;
+phi_GSMP_0 = phi_GSMP_r;
+w_GSM_0 = w_GSM_r;
+w_P_0 = w_P_r;
 
 % Linearisiertes Modell
 A_lin = [ -R_GSM/L_GSM, 0, -k_GSM/L_GSM, 0; ...
