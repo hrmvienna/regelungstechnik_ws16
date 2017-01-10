@@ -301,48 +301,50 @@ grid on
 
 %% Aufgabe 2.1.5: Simulieren der implementierten Regler
 
-% Parameter aus Esys_Parameter.m von Aufgabe 1.4:
-R1      = 625;    % Widerstand in 
-R_1 = R1;
-R2      = 3500;   % Widerstand in Ohm
-R_2 = R2;
-K       = 3;      % Spannungsverstaerkung
-C1_ref  = 1e-6;   % Referenz-Kapazitaetswert auf Kennlinie von C1 in F
-UC1_ref = -10;    % Referenz-Spannungswert auf Kennlinie von C1 in V
-kC1     = 800e-9; % Steigung der Kennlinie von C1 in F/V
-C2      = 1e-6;   % Kapazitaet in F
-UeR = 5;
-UsR = 5;
-te = 0.015;      % Einschaltzeitpunkt in Sekunden
-Ue = 7;      % Endwert des Sprunges in Volt
-Usinus = 0.1; % Amplitude des Sinus in Volt
-we     = 10;  % Winkelfrequenz des Sinus in rad/s
-ts = 0.05;     % Einschaltzeitpunkt in Sekunden
-Us = 1;     % Endwert des Sprunges in Volt
-UC1R = -(K*R2*UeR - R1*UsR - 2*R2*UeR + K*R1*UsR + K*R2*UsR)/(R1 + 2*R2);
-UC2R = (R2*UeR + R1*UsR + R2*UsR)/(R1 + 2*R2);
-UaR  = K*UC2R;
-dQ1  = C1_ref + UC1R*kC1 - UC1_ref*kC1; % Erste Ableitung von Q1 nach UC1
-ddQ1 = kC1; % Zweite Ableitung von Q1 nach UC1
-C1 = dQ1;
+% Esys_Parameter ausfuehren
 
-A11 = -(R1 + R2)/(C1*R1*R2);
-A12 = -(K*R1 - R1 + K*R2)/(C1*R1*R2);
-A21 = 1/(C2*R2);
-A22 = (K - 2)/(C2*R2);
+% Ergebnisse PI Regler:
+% =====================
+% Stabilitaet:
+% Das nichtlineare System ist ohne Stoerungseingang instabil, das lineare
+% jedoch stabil. Bei einem aktiven Stoereingang, ist das nichtlineare und
+% das lineare System Stabil.
+% Beim Aufschalten einer Rampenfoermigen Stroerung, wird das nichtlineare
+% System nach ca 1.2sek leicht instabil und laueft nach 1.6sek gegen minus
+% unendlich.
 
-A  = [A11,A12;A21,A22];
-bu = [1/(C1*R1);0];
-bd = [0;1/(C2*R2)];
-c  = [0, K];
-du = [0];
-dd = [0];
+% Sprungantwort Eingang:
+% Das lineare System reagiert etwas langsamer auf den Eingangssprung und
+% hat mehr Ueberschwingen als das nichtlineare.
+% Das lineare System hat ein Ueberschwingen von 4%. Die Anstiegszeit passt
+% enstprechend den Vorgaben.
 
-% Ergebnisse:
-% Der linearisierte Regelkreis ist stabil. Die Anforderungen <sind|sind nicht>
-% (TODO) erfuellt. TODO: Verhalten Eingangssprung und Stoersprung
-% Der nicht linearisierte Regelkreis ist nicht stabil, der Ausgang  laueft
-% sehr schnell gegen minus unendlich.
+% Sprungantwort Stoeprung:
+% Das lineare System unterdrueckt die Stoerung schneller und schwingt nur
+% leicht nach, wohingegen das nichtlineare System laeger braucht bis die
+% Stoerung unterdrueckt und abgeklungen ist. Das Ueberschwingen des
+% nichtlinearen Systems ist dabei 2%.
+
+
+% Ergebnisse PID Regler:
+% ======================
+% Stabilitaet:
+% Das lineare und nichtlineare System sind bei aktiven Störeingang stabil.
+% Ohne Stoereingang ist das nichtlineare System wieder instabil.
+% Beim aufschalten einer Rampenfoermigen Stoerung wird das nichtlin. Sys.
+% nach ca. 1.5sek instabil und laueft gegen minus unendlich.
+
+% Sprungantwort Eingang:
+% Das lineare System hat mehr Ueberschwingen (7%) als das lineare System
+% (5%) und schwingt mehr nach. Beide Systeme brauchen aber eine laenger
+% Zeit bis sie sich wieder auf den vorgegebenen Wert einfinden.
+% Die Anstiegszeit wird eingehalten.
+
+% Sprungantwort Stoersprung:
+% Das lineare System unterdrueckt einen Stoersprung sehr gut ohne starkes
+% ueberschwingen, wohingegen das nichtlineare System staerker schwingt.
+% Beide Systeme brauchen dannach, wie beim Eingangssprung, eine laengere
+% Zeit bis sie sich wieder einfinden.
 
 %% Aufgabe 2.1.6: Messrauschen
 
