@@ -147,7 +147,7 @@ L_2 = R_2*Gs;
 phi_L_2 = atan (im_L_2/re_L_2) * 180/pi
 
 
-% Betrag korregieren, mit dem Verstaerkungsfaktor
+% Betrag korrigieren, mit dem Verstaerkungsfaktor
 abs_L_2 = sqrt(re_L_2^2 + im_L_2^2) % V_R*abs(L_2(I*omega_c) = 1
 V_R = 1/(abs_L_2)
 R_3 = V_R*R_2;
@@ -289,7 +289,16 @@ legend('Try PI', 'Tdy PI', 'Try PID', 'Tdy PID')
 xlim([0 0.05])
 grid on
 
-% Rampenanwort TODO
+% Rampenanwort
+figure
+s = tf('s')
+step(T_ry_pi/s, T_dy_pi/s, T_ry_pid/s, T_dy_pid/s)
+title('Rampenantworten fuer die Fuehrungs/Stoeruebertragungsfunktion')
+legend('Try PI', 'Tdy PI', 'Try PID', 'Tdy PID')
+xlim([0 0.05])
+grid on
+
+
 
 %% Aufgabe 2.1.5: Simulieren der implementierten Regler
 
