@@ -348,10 +348,9 @@ grid on
 
 %% Aufgabe 2.1.6: Messrauschen
 
-% TODO: Verhalten mit und ohne Messrauschen beschreiben
-
-% Mit Messrauschen laeuft das nichtlineare System langsamer gegen
-% +unendlich.
+% Das Messrauschen greift direkt auf den Ausgang durch und kann von beiden
+% Systemen nicht unterdrueckt werden. Jedoch werden die Systeme dadurch
+% auch nicht instabilisiert.
 
 %% Aufgabe 2.1.7: Steigungsbegraenzung
 
