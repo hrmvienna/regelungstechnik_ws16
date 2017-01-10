@@ -47,4 +47,10 @@ ct = [0 0 1];
 %% Aufgabe 2.3.3: Ruhelagen vergleichen
 
 % Die Ruhelagen des reduzierten Systems sind gleich dem des vollstaendigen
-% Systems. TODO: Begruendung
+% Systems.
+
+% Die Ruhelagen des reduzierten Systems sind identisch mit den Ruhelagen
+% des nicht reduzierten Systems, weil das System vorher um die Ruhelagen
+% linearisiert wurde und darauf hin reduziert und durch die Näherung der
+% singulären Störungstheorie kann die Stromgleichung sehr gut angenehert
+% werden (Siehe Simulationsergebnis 2_3_3_i_scope)
