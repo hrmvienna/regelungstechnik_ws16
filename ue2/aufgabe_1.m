@@ -299,7 +299,6 @@ xlim([0 0.05])
 grid on
 
 
-
 %% Aufgabe 2.1.5: Simulieren der implementierten Regler
 
 % Parameter aus Esys_Parameter.m von Aufgabe 1.4:
