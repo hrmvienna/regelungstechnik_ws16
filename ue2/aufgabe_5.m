@@ -166,39 +166,36 @@ grid on
 %% Regler im z-Bereich
 
 Rz = c2d(Rq, Ta, 'tustin')
-Rz_komp = c2d(Rq_komp, Ta, 'tustin');
-Rz_rest = c2d(Rq_1*Rq_2*Rq_3*Rq_4, Ta, 'tustin');
+%Rz_komp = c2d(Rq_komp, Ta, 'tustin');
+%Rz_rest = c2d(Rq_1*Rq_2*Rq_3*Rq_4, Ta, 'tustin');
 
-% Pole und Nullstellen von Rz_rest
-Rz_rest_pol = pole(Rz_rest);
-Rz_rest_nul = zero(Rz_rest);
-% Pole und Nullstellen von Rz_komp
-Rz_komp_pol = pole(Rz_komp);
-Rz_komp_nul = zero(Rz_komp);
+% Den Regler Rz in Rz_komp und Rz_PI aufteilen
+% Pole und Nullstellen von Rz
+Rz_nul = zero(Rz);
+Rz_pol = pole(Rz);
 
-% Rz_komp neu anlegen, da sich zwei Polstelle von Rz_komp (p12 = -1) mit 
-% zwei Nullstellen von Rz_rest kuerzen.
-num_rz = poly([Rz_komp_nul(1) Rz_komp_nul(2)]);
-den_rz = poly([Rz_rest_pol(2) Rz_rest_pol(3)]);
-Rz_komp_new = tf(num_rz, den_rz, Ta);
-% Rz_rest neu anlegen
-num_rz2 = poly([Rz_rest_nul(1)]);
-den_rz2 = poly([Rz_rest_pol(1)]);
-% residue
-[Rz_I,Rz_Pol,Rz_P] = residue(num_rz2, den_rz2)
+% Rz_komp
+num_komp = poly([Rz_nul(2) Rz_nul(3)]);
+den_komp = poly([Rz_pol(2) Rz_pol(3)]);
+Rz_komp = tf(num_komp, den_komp, Ta);
+
+% Rz_PI
+num_pi = poly([Rz_nul(1)]);
+den_pi = poly([Rz_pol(1)]);
+Rz_PI = tf(num_pi, den_pi, Ta);
+
+% residue von Rz_PI
+[I,p1,P] = residue(num_pi, den_pi);
 
 % Proportional und Integralglied
-Rz_p = tf([Rz_P],[1], Ta);
-Rz_i = tf([Rz_I],[1 -Rz_Pol], Ta);
+Rz_p = tf([P],[1], Ta);
+Rz_i = tf([I],[1 -p1], Ta);
 Rz_p_i = Rz_p + Rz_i;
 
-% Gesamtregler im Z Bereich
-Rz_gesamt = Rz_p_i*Rz_komp_new
+% Ueberpruefung: Rz_p_i == Rz_PI
 
-%% 
-% Residue Rz_rest
-[Rz_rest_num, Rz_rest_den] = tfdata(Rz_rest, 'v');
-[r,p,k] = residue(Rz_rest_num, Rz_rest_den)
-% Residue Rz_komp
-[Rz_komp_num, Rz_komp_den] = tfdata(Rz_komp, 'v');
-[r,p,k] = residue(Rz_komp_num, Rz_komp_den)
+% Gesamtregler im Z Bereich
+Rz_gesamt = Rz_p_i*Rz_komp
+
+% Rz_gesamt und Rz unterscheiden sich um den Faktor 0.1291, die Nullstellen
+% sind ident, nur die Koeffizienzen sind verschieden. (?!)
