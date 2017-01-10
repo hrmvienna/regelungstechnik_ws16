@@ -46,10 +46,10 @@ Gu = tf_sys(1);
 Gd = tf_sys(2);
 
 % Zeitdiskrete Uebertragungsfunktion T_ry und T_dy
-sys_q = c2d(sys, Ta, 'zoh');
-tf_q = tf(sys_q);
-Gq = tf_q(1)
-Gqd = tf_q(2)
+Gz = c2d(Gu, Ta, 'zoh');
+Gzd = c2d(Gd, Ta, 'zoh');
+Gq = d2c(Gz, 'tustin');
+Gqd = d2c(Gzd, 'tustin');
 
 %% Reglerentwurf
 %% A: Streckenuebertragungsfunktion
@@ -70,17 +70,17 @@ u_gsm_max = 12;
 %% B: Kenngroessen berechnen: Durchtrittsfrequenz und Phasenreserve
 
 % Quadratischer Term der Strecke aus den konj.compl. Polstellen errechnen
-pole_sys = pole(sys_q);
+pole_sys = pole(Gq);
 p_con1 = pole_sys(1);
 p_con2 = pole_sys(2);
 syms x
 coeff_p = coeffs(simplify(((x - p_con1))*(x - (p_con2))), x);
-ac = coeff_p(2);
-bc = coeff_p(1);
-xi2T = ac/bc;
-Tsq  = 1/bc;
+c1 = coeff_p(2);
+c2 = coeff_p(1);
+xi2T = c1/c2;
+Tsq  = 1/c2;
 T = double(sqrt(Tsq))
-xi = double(xi2T /(2*T))
+xi = double(c1/(2*c2*T))
 
 % Kenngroessen berechnen
 omega_c = 1.2/t_r
@@ -92,35 +92,70 @@ phi_soll = 70 - u_e
 %% C: Reglerentwurf: zuerste Phase und Verstaerkung der bekannten Terme 
 
 % Regler aus den bekannten Termen
-Rq_komp = tf([(T^2) (2*xi*T) 1], [1], Ta);
-Rq_1 = tf([1], [1 0], Ta)*Rq_komp
-Lq_1 = Rq_1*Gq;
+Rq_komp = tf([(T^2) (2*xi*T) 1], [1]);
+V_1 = double(c2);
+Rq_1 = V_1*tf([1], [1 0])*Rq_komp;
+Lq_1 = minreal(Rq_1*Gq);
 
-% Phasenreserve bei Lq_1(I*omega_c)
-[re_Lq_1 im_Lq_1] = nyquist(Lq_1, omega_c);
-phi_Lq_1 = atan (im_Lq_1/re_Lq_1) * 180/pi % phi = arctan(Im/re)[rad], [degree] = [rad]*180/pi,
-                                              % - 180 um in den richtigen
-                                              % Quadranten zu kommen.
-phi_dif = -180 + phi_soll - phi_Lq_1
-
-% Phase muss um -49.4686 gesenkt werden
-% mithilfe des Terms (1 + s*T_2)
-% arctan(omega_c * T_2) = phi_L_1 * pi/180
-T_I = tan(phi_dif * pi /180)/omega_c;
-Rq_2 = tf([T_I 1], 1, Ta) * Rq_1;
-Lq_2 = Rq_2*Gq;
+% % Realisierungpole waehlen
+T_Real = 7;
+Rq_real = tf([1], [1 T_Real]);
+Rq_2 = Rq_real*Rq_real;
+Lq_2 = Rq_2*Lq_1;
 
 % Phasenreserve bei Lq_2(I*omega_c)
 [re_Lq_2 im_Lq_2] = nyquist(Lq_2, omega_c);
-phi_Lq_2 = atan (im_Lq_2/re_Lq_2) * 180/pi;
+phi_Lq_2 = atan (im_Lq_2/re_Lq_2) * 180/pi; % phi = arctan(Im/re)[rad], [degree] = [rad]*180/pi,
+
+phi_dif = phi_soll - phi_Lq_2
+
+% Phase muss um 41.9121 gehoben werden
+% mithilfe des Terms (1 + s*T_I)
+% arctan(omega_c * T_I) = phi_dif * pi/180
+T_I = tan(phi_dif * pi /180)/omega_c;
+Rq_3 = tf([T_I 1], 1);
+Lq_3 = Rq_3*Lq_2;
+
+% Phasenreserve bei Lq_3(I*omega_c)
+[re_Lq_3 im_Lq_3] = nyquist(Lq_3, omega_c);
+phi_Lq_3 = atan (im_Lq_3/re_Lq_3) * 180/pi;
+
+% Betrag korregieren, mit dem Verstaerkungsfaktor
+abs_Lq_3 = sqrt(re_Lq_3^2 + im_Lq_3^2) % V_R*abs(L_3(I*omega_c) = 1
+V_R = 1/(abs_Lq_3)
+Rq_4 = V_R;
+Lq_4 = Rq_4*Lq_3;
+
+%% D: Bodediagramm und ueberpruefen ob die Bedingungen erfuellt sind 
 
 figure
-line([omega_c omega_c], [25, -150])
+line([omega_c omega_c], [5, -5], 'Color','k');
 hold on
-bode(Gq, Lq_1, Lq_2)
-%hold on
-line([omega_c omega_c], [-90, -160])
-line([1 2], [-130,-130])
+h = bodeplot(Gq, Lq_1, Lq_2, Lq_3, Lq_4);
+p = getoptions(h); % return plotoptions for bode plot
+p.PhaseMatching = 'on';
+p.PhaseMatchingValue = 0;
+setoptions(h,p);
+%bode(Gq, Lq_1, Lq_2, Lq_3)
+line([omega_c omega_c], [-100, -120], 'Color','k');
 grid on
 title('2.1: Bode-Diagramm von G#(q) und der offfene Regelkreise')
-legend('G#(q)', 'L1(q)','L2(q)', 'omega_c', 'phi soll');
+legend('G#(q)', 'L1(q)','L2(q)','L3(q)','L4(q)', 'omega_c');
+
+%% E: Sprungantwort des geschlossenen Kreises
+
+% Geschlossener Kreis
+T_ry = Lq_4 / (1 + Lq_4);
+
+figure
+step(T_ry)
+% Ueberschwingung einzeichnen
+line([0, 7], [1, 1], 'Color', 'r')
+% tr so halbwegs einzeichnen, wie Abbildung 5.2.
+a = 0.75; % Wendepunkt, vom Plot abgelesen (anklicken)
+line([a-t_r/2, a+t_r/2], [0, 1], 'Color','k')
+line([a-t_r/2, a-t_r/2], [0, 1], 'Color','g')
+line([a+t_r/2, a+t_r/2], [0, 1], 'Color','g')
+title('Sprungantwort des geschlossenen Kreises L4(s)')
+legend('Try', 'ue', 'tr')
+grid on
