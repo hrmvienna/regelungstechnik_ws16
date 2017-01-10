@@ -53,4 +53,4 @@ ct = [0 0 1];
 % des nicht reduzierten Systems, weil das System vorher um die Ruhelagen
 % linearisiert wurde und darauf hin reduziert und durch die Näherung der
 % singulären Störungstheorie kann die Stromgleichung sehr gut angenehert
-% werden (Siehe Simulationsergebnis 2_3_3_i_scope)
+% werden (Siehe Simulationsergebnis 2_3_3_i_scope) TODO
