@@ -94,8 +94,8 @@ phi_soll = 70 - u_e
 % Regler aus den bekannten Termen
 Rq_komp = tf([(T^2) (2*xi*T) 1], [1]);
 V_1 = double(c2);
-Rq_1 = V_1*tf([1], [1 0])*Rq_komp;
-Lq_1 = minreal(Rq_1*Gq);
+Rq_1 = V_1*tf([1], [1 0]);
+Lq_1 = minreal(Rq_1*Rq_komp*Gq);
 
 % % Realisierungpole waehlen
 T_Real = 7;
@@ -125,6 +125,9 @@ abs_Lq_3 = sqrt(re_Lq_3^2 + im_Lq_3^2) % V_R*abs(L_3(I*omega_c) = 1
 V_R = 1/(abs_Lq_3)
 Rq_4 = V_R;
 Lq_4 = Rq_4*Lq_3;
+
+% Gesamtregler
+Rq = Rq_komp*Rq_1*Rq_2*Rq_3*Rq_4;
 
 %% D: Bodediagramm und ueberpruefen ob die Bedingungen erfuellt sind 
 
@@ -159,3 +162,12 @@ line([a+t_r/2, a+t_r/2], [0, 1], 'Color','g')
 title('Sprungantwort des geschlossenen Kreises L4(s)')
 legend('Try', 'ue', 'tr')
 grid on
+
+%% Regler im z-Bereich
+
+Rz = c2d(Rq, Ta, 'tustin')
+Rz_komp = c2d(Rq_komp, Ta, 'tustin');
+Rz_rest = c2d(Rq_1*Rq_2*Rq_3*Rq_4, Ta, 'tustin');
+
+[Rz_rest_num, Rz_rest_den] = tfdata(Rz_rest, 'v');
+[r,p,k] = residue(Rz_rest_num, Rz_rest_den)
