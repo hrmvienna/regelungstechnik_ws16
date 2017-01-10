@@ -354,9 +354,16 @@ grid on
 
 %% Aufgabe 2.1.7: Steigungsbegraenzung
 
-% TODO: Verhalten mit Steigungsbegrenzung untersuchen.
+% Auswirkung der Steigungsbegrenzung auf die Stellgroesse:
+% Die Stellgroesse andert sich ab dem Aufschalten eines Sprungs mit
+% konstanter Steigung (wie eine Rampe) bis sie den Endwert des Sprungs
+% erreicht hat.
+% Auswirkung auf den Ausgang:
+% Der Ausgang folgt der langsam steigenden Stellgroesse sehr gut und es
+% kommt zu minimalem Ueberschwingen bei beiden Systemen.
 
-% Vorteile bei der begrenzung  der Aenderungsrate:
+% Vorteile: 
 % Die Dynamik der Aktoren muss nicht so gross sein, somit koennen
-% guenstigere Aktoren verwendet werden.
+% guenstigere Aktoren verwendet werden, unabhaengig von den erwarteten
+% Stoerungen. 
 
