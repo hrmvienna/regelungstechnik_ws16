@@ -168,3 +168,31 @@ we = 2; % sin omega
 % figure
 % step((Rq*Gq)/(1 + Rq*Gq))
 % grid on
+
+%% Stabilitaet ueberpruefen
+
+% Lineares System
+L_lin = Gz_lin*Rz;
+T_ry_lin = L_lin / (1 + L_lin);      % Eingang zu Ausgang
+T_dy_lin = Gzd_lin / (1 + L_lin);    % Stoerung zu Ausgang
+T_ru_lin = Rz / (1 + L_lin);         % Eingang zu Stellgroesse
+T_uy_lin = Gz_lin / (1 + L_lin);     % Stellgroesse zu Ausgang
+T_du_lin = -(Gzd_lin*L_lin)/(1 + L_lin);% Stoerung zu Stellgroesse
+abs(pole(T_ry_lin))   % Ein Pol am EK, alle anderen darin
+abs(pole(T_dy_lin))   % Alle Pole innerhalb des EK
+abs(pole(T_ru_lin))   % Ein Pol am EK, alle anderen darin
+abs(pole(T_uy_lin))   % Alle Pole innerhalb des EK
+abs(pole(T_du_lin))   % Ein Pol ausserhalb des EK, alle anderen |p| < 1
+
+% Reduziertes System
+L_red = Gz_red*Rz;
+T_ry_red = L_red / (1 + L_red);      % Eingang zu Ausgang
+T_dy_red = Gzd_red / (1 + L_red);    % Stoerung zu Ausgang
+T_ru_red = Rz / (1 + L_red);         % Eingang zu Stellgroesse
+T_uy_red = Gz_red / (1 + L_red);     % Stellgroesse zu Ausgang
+T_du_red = -(Gzd_red*L_red)/(1 + L_red);% Stoerung zu Stellgroesse
+abs(pole(T_ry_red))   % Ein Pol am EK, alle anderen darin
+abs(pole(T_dy_red))   % Alle Pole innerhalb des EK
+abs(pole(T_ru_red))   % Ein Pol am EK, alle anderen darin
+abs(pole(T_uy_red))   % Alle Pole innerhalb des EK
+abs(pole(T_du_red))   % Ein Pol ausserhalb des EK, alle anderen |p| < 1
