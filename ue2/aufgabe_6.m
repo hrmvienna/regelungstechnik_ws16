@@ -88,11 +88,6 @@ phi_GSMP_0 = phi_GSMP_r;
 w_GSM_0 = w_GSM_r;
 w_P_0 = w_P_r;
 
-% i_GSM_0 = 0;
-% phi_GSMP_0 = 0;
-% w_GSM_0 = 0;
-% w_P_0 = 0;
-
 %% Reduzierte System
 A_red = [             0,                                        1,                               -1;...
  -c_GSMP/J_GSM, -(k_GSM^2/R_GSM + d_GSMP + d_vGSM)/J_GSM,                        d_GSMP/J_GSM;...
@@ -152,14 +147,21 @@ Rz_den = [1 -2.40425531914894 1.89723856948846 -0.492983250339520];
 Rz = tf(Rz_num, Rz_den, Ta);
 Rq = d2c(Rz, 'tustin');
 
-Try_num = [0.000314580928418420 -0.00845210206034595 -1.68449864678759 37.1533505213221 838.487970229087 4130.14296061898 4649.67519742700 1508.98401881251 0];
-Try_den = [1.00031458092842 29.4429060654243 333.480140175364 1850.59773547408 5385.57475499688 8337.36302265092 5914.06612575424 1508.98401881251 0];
+% Regler mit t_r = 4
+num = [0.0114235121008542 -0.0302399436766243 0.0285518173838854 -0.00952261914285287];
+den = [1 -2.40425531914894 1.89723856948846 -0.492983250339520];
+Rz_tr4 = tf(num, den, Ta);
 
-Try = tf(Try_num, Try_den);
+% Regler mit t_r = 0.5, realisierungspol = 15
+num = [0.856133395773891 -2.32771511276413 2.24730725704585 -0.770779483086807];
+den = [1 -1.90909090909091 1.11570247933884 -0.206611570247934];
+Rz_tr05 = tf(num, den, Ta);
+
+
 
 % Zusaetzliche Parameter
 te = 1; % Start Eingangssprung
-ts = 5; % Start Stoersprung
+ts = 0.5; % Start Stoersprung
 tr = 5; % Start Rampe
 Usinus = 1; % sin amp
 we = 2; % sin omega
