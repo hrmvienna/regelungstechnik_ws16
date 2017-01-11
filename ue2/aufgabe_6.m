@@ -139,7 +139,6 @@ Gq_lin = d2c(Gz_lin, 'tustin');
 Gqd_lin = d2c(Gzd_lin, 'tustin');
 
 %% PI-Komp Regler aus Aufgabe 2.5
-syms z
 
 Ta = 50e-03;
 Rz_num = [0.129052836691455 -0.350640525783673 0.338341661652813 -0.115965884301370];
