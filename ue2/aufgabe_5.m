@@ -167,6 +167,10 @@ title('Sprungantwort des geschlossenen Kreises L4(s)')
 legend('Try', 'ue', 'tr')
 grid on
 
+%% F: Stellegroessenanforderungen
+
+% Stellgroesse darf nur im Bereich von 0 bis 12 V liegen.
+% Ueberpruefung in der Simulation aufgabe_6_sim.slx
 
 %% Regler im z-Bereich
 
