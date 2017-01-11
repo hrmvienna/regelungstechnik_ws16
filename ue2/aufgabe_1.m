@@ -193,13 +193,13 @@ grid on
 % Ist das FKL-Verfahren ein exaktes Entwurfsverfahren, wenn die Strecke ein
 % Verzoegerungsglied 2-ter Ordnung ist?
 
-% Die Strecke ist ein Modell/Abbild der Wirklichkeit und ist dahe nicht
-% 100%ig exakt. Des Weiteren baut das FKL-Verfahren auf numerisch
-% errechneten Werten (Verhaeltnis omega_c zu t_r, Ueberschwingen) auf, und
-% enthaelt somit Ungenauigkeiten, somit ist das Verfahren nicht exakt.
-
-% TODO - Tutor meint das unter Umstaenden stabil ist; im Skritpum
-% nachschaun - Skript Seite 123
+% Von einer Uebertragunsfunktion der Form Try(s) = 1 / (1+ 2xi(sT) + (sT)12) 
+% koennen die empirischen Naeherungsverfahren exakt hergeleitet werden.
+% (Siehe Kapitel 5, Aufgabe 5.3, Seite 126). xi = Daempfungsgrad
+% Dabei errechnet man sich die Anstiegszeit t_r und die Durchtrittsfrequenz
+% omega_c anhand der Koeffizienten xi und T. Des Weiteren kann das
+% Ueberschwingen und die Phasenreserve in Abhaengigkeit von xi bestimmt 
+% werden.
 
 %% Aufgabe 2.1.3 PID Regler - Aehnlich: Lead-Lag-Reglerentwurf
 
