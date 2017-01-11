@@ -313,6 +313,17 @@ grid on
 % System nach ca 1.2sek leicht instabil und laueft nach 1.6sek gegen minus
 % unendlich.
 
+T_ry_pi = L_PI / (1 + L_PI);    % Eingang zu Ausgang
+T_dy_pi = Gd / (1 + L_PI);      % Stoerung zu Ausgang
+T_ru_pi = R_PI / (1 + L_PI);    % Eingang zu Stellgroesse
+T_uy_pi = Gs / (1 + L_PI);      % Stellgroesse zu Ausgang
+T_du_pi = -(Gd*R_PI)/(1 + L_PI);% Stoerung zu Stellgroesse
+pole(T_ry_pi)   % Ein Pol bei s = 0, die anderen Re < 0
+pole(T_dy_pi)   % Alle Pole mit Re < 0
+pole(T_ru_pi)   % Ein Pol bei s = 0, die anderen Re < 0
+pole(T_uy_pi)   % Alle Pole mit Re < 0
+pole(T_du_pi)   % Ein Pol bei s = 0, die anderen Re < 0
+
 % Sprungantwort Eingang:
 % Das lineare System reagiert etwas langsamer auf den Eingangssprung und
 % hat mehr Ueberschwingen als das nichtlineare.
@@ -333,6 +344,17 @@ grid on
 % Ohne Stoereingang ist das nichtlineare System wieder instabil.
 % Beim aufschalten einer Rampenfoermigen Stoerung wird das nichtlin. Sys.
 % nach ca. 1.5sek instabil und laueft gegen minus unendlich.
+
+T_ry_pid = L_PID / (1 + L_PID);    % Eingang zu Ausgang
+T_dy_pid = Gd / (1 + L_PID);       % Stoerung zu Ausgang
+T_ru_pid = R_PID / (1 + L_PID);    % Eingang zu Stellgroesse
+T_uy_pid = Gs / (1 + L_PID);       % Stellgroesse zu Ausgang
+T_du_pid = -(Gd*R_PID)/(1 + L_PID);% Stoerung zu Stellgroesse
+pole(T_ry_pid)   % Ein Pol bei s = 0, die anderen Re < 0
+pole(T_dy_pid)   % Alle Pole mit Re < 0
+pole(T_ru_pid)   % Ein Pol bei s = 0, die anderen Re < 0
+pole(T_uy_pid)   % Alle Pole mit Re < 0
+pole(T_du_pid)   % Ein Pol bei s = 0, die anderen Re < 0
 
 % Sprungantwort Eingang:
 % Das lineare System hat mehr Ueberschwingen (7%) als das lineare System
