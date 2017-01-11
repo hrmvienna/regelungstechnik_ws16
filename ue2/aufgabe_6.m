@@ -1,5 +1,14 @@
 clear all; close all; clc
 
+%% Antwort zu 2.6
+% Alle drei Systeme weisen kein Überschwingen auf, die Anstiegszeit wird 
+% eingehalten. Es bleibt keine Regelabweichung und die Stellgröße bleibt 
+% im Bereich [0, 12] V (Siehe aufgabe_6.fig).
+% Der Ausgang des nicht-Linearisiertem System steigt etwas spaeter an und 
+% schwingt noch leicht nach aber nicht über. 
+% Die beiden linearisierten Systeme schwingen minimal vor dem Erreichen des
+% Endwertes.
+
 %% Parameter und Ruhelage
 
 % Zustandsgroessen
@@ -79,6 +88,11 @@ phi_GSMP_0 = phi_GSMP_r;
 w_GSM_0 = w_GSM_r;
 w_P_0 = w_P_r;
 
+% i_GSM_0 = 0;
+% phi_GSMP_0 = 0;
+% w_GSM_0 = 0;
+% w_P_0 = 0;
+
 %% Reduzierte System
 A_red = [             0,                                        1,                               -1;...
  -c_GSMP/J_GSM, -(k_GSM^2/R_GSM + d_GSMP + d_vGSM)/J_GSM,                        d_GSMP/J_GSM;...
@@ -153,4 +167,3 @@ we = 2; % sin omega
 % figure
 % step((Rq*Gq)/(1 + Rq*Gq))
 % grid on
-
