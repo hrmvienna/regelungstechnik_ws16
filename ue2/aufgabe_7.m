@@ -6,12 +6,12 @@ clear all; close all; clc
 % auf die Ausgangsgroesse aus (4.3.1 Ad(5)), Tny = -Try
 
 
-% Bei kürzerer Anstiegszeit (tr < 1) und schnellerer Dynamik (mehr Stellgroesse
-% wird benoetigt) wird der Verstärkungsfaktor dementsprechend größer und
-% wirkt sich das Sensorrauschen stärker auf die Stellgröße aus. Tnu = Tdu
+% Bei kuerzerer Anstiegszeit (tr < 1) und schnellerer Dynamik (mehr Stellgroesse
+% wird benoetigt) wird der Verstaerkungsfaktor dementsprechend groesser und
+% wirkt sich das Sensorrauschen staerker auf die Stellgroesse aus. Tnu = Tdu
 
-% Bei größeren Anstiegszeit (tr > 1) wirkt sich das Sensorrauschen nicht
-% so stark auf die Stellgröße aus.
+% Bei groesseren Anstiegszeit (tr > 1) wirkt sich das Sensorrauschen nicht
+% so stark auf die Stellgroesse aus.
 
 
 % tr = 0.5, q = 15 -> b_n = -0.8561
@@ -19,7 +19,7 @@ clear all; close all; clc
 % tr = 1, q = 7 -> b_n = -0.1291
 
 
-%%
+%% Parameter
 
 Ta = 50e-03;
 
@@ -30,9 +30,6 @@ Gz_lin_den = [1,-2.71439290270362,2.61753640663902,-0.896725281314584,7.17948644
 Gz_lin = tf(Gz_lin_num, Gz_lin_den, Ta);
 
 %% PI-Komp Regler aus Aufgabe 2.5
-syms z
-
-Ta = 50e-03;
 Rz_num = [0.129052836691455 -0.350640525783673 0.338341661652813 -0.115965884301370];
 Rz_den = [1 -2.40425531914894 1.89723856948846 -0.492983250339520];
 Rz = tf(Rz_num, Rz_den, Ta);
