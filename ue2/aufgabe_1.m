@@ -369,7 +369,7 @@ pole(T_du_pid)   % Ein Pol bei s = 0, die anderen Re < 0
 % Das lineare System unterdrueckt einen Stoersprung sehr gut ohne starkes
 % ueberschwingen, wohingegen das nichtlineare System staerker schwingt.
 % Beide Systeme brauchen dannach, wie beim Eingangssprung, eine laengere
-% Zeit bis sie sich wieder einfinden.
+% Zeit bis sie sich wieder einfinden. 
 
 %% Aufgabe 2.1.6: Messrauschen
 
@@ -390,5 +390,5 @@ pole(T_du_pid)   % Ein Pol bei s = 0, die anderen Re < 0
 % Vorteile: 
 % Die Dynamik der Aktoren muss nicht so gross sein, somit koennen
 % guenstigere Aktoren verwendet werden, unabhaengig von den erwarteten
-% Stoerungen. 
+% Stoerungen. Es kommt auch nicht zum Ueberschwingen.
 
