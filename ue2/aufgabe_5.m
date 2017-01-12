@@ -94,8 +94,8 @@ phi_soll = 70 - u_e
 % Regler aus den bekannten Termen
 Rq_kompterm = tf([(T^2) (2*xi*T) 1], [1]);
 V_1 = double(c2);
-Rq_1 = V_1*tf([1], [1 0]);
-Lq_1 = minreal(Rq_1*Rq_kompterm*Gq);
+Rq_1 = tf([1], [1 0]);
+Lq_1 = minreal(V_1*Rq_1*Rq_kompterm*Gq);
 
 % % Realisierungpole waehlen
 T_Real = 7;
@@ -126,9 +126,11 @@ V_R = 1/(abs_Lq_3)
 Rq_4 = V_R;
 Lq_4 = Rq_4*Lq_3;
 
+V_I = V_R*V_1;
+
 % Regler im q-Bereich in PI- und Kompensationsteil teilen
 Rq_komp = Rq_kompterm*Rq_2
-Rq_PI = Rq_1*Rq_3*Rq_4
+Rq_PI = V_1*Rq_1*Rq_3*Rq_4
 
 % Gesamtregler
 Rq = Rq_PI*Rq_komp;
