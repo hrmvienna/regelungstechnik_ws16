@@ -65,13 +65,24 @@ L_3 = L_2*R_lag
 phi_L_3 = atan (im_L_3/re_L_3) * 180/pi
 abs_L_3 = sqrt(re_L_3^2 + im_L_3^2)
 
+Try = L_3 / (1 + L_3);
+
 figure
 line([omega_c omega_c], [25, -25])
 hold on
-bode(Gs, L_1, L_2, L_3)
+bode(Gs, V_R*R_lag*R_lead, L_3, Try)
 %hold on
 line([omega_c omega_c], [-90, -160])
 line([5 20], [phi_soll-180,phi_soll-180])
 grid on
 title('2.1: Bode-Diagramm von G(s) und der offfene Regelkreise')
-legend('G(s)', 'L1(s)','L2(s)','L3(s)', 'omega_c', 'phi soll');
+legend('G(s)', 'R(s)','L(s)','Try(s)', 'omega_c', 'phi soll');
+
+%%
+
+figure
+line([0, 10], [1.15, 1.15], 'Color', 'r')
+hold on
+step(Try)
+grid on
+stepinfo(Try)

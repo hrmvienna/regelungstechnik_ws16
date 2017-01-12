@@ -141,8 +141,8 @@ Rz2 = c2d(Rq, Ta, 'tustin');
 Lz1 = Gz*Rz1;
 Lz2 = Gz*Rz2;
 
-Try1 = Lz1 / (1+ Lz1);
-Try2 = Lz2 / (1+ Lz2);
+Try1 = feedback(Lz1, 1);
+Try2 = feedback(Lz2, 1);
 
 figure
 step(Try1, Try2)
