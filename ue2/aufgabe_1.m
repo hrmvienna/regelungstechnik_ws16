@@ -253,6 +253,7 @@ figure
 line([omega_c omega_c], [25, -50])
 hold on
 bode(Ll_1, Ll_2)
+
 %hold on
 line([omega_c omega_c], [-90, -160])
 line([400 600], [phi_soll-180,phi_soll-180])
@@ -308,7 +309,8 @@ grid on
 % Stabilitaet:
 % Das nichtlineare System ist ohne Stoerungseingang instabil, das lineare
 % jedoch stabil. Bei einem aktiven Stoereingang, ist das nichtlineare und
-% das lineare System Stabil.
+% das lineare System Stabil (aus der Simulation).
+% Jedoch ist der geschlossene Regelkreis nicht intern stabil (p_i = 0)
 % Beim Aufschalten einer Rampenfoermigen Stroerung, wird das nichtlineare
 % System nach ca 1.2sek leicht instabil und laueft nach 1.6sek gegen minus
 % unendlich.
@@ -340,8 +342,9 @@ pole(T_du_pi)   % Ein Pol bei s = 0, die anderen Re < 0
 % Ergebnisse PID Regler:
 % ======================
 % Stabilitaet:
-% Das lineare und nichtlineare System sind bei aktiven Störeingang stabil.
+% Das lineare und nichtlineare System sind bei aktiven Stoereingang stabil.
 % Ohne Stoereingang ist das nichtlineare System wieder instabil.
+% Wie zuvor ist das System nicht intern stabil.
 % Beim aufschalten einer Rampenfoermigen Stoerung wird das nichtlin. Sys.
 % nach ca. 1.5sek instabil und laueft gegen minus unendlich.
 
@@ -357,9 +360,9 @@ pole(T_uy_pid)   % Alle Pole mit Re < 0
 pole(T_du_pid)   % Ein Pol bei s = 0, die anderen Re < 0
 
 % Sprungantwort Eingang:
-% Das lineare System hat mehr Ueberschwingen (7%) als das lineare System
-% (5%) und schwingt mehr nach. Beide Systeme brauchen aber eine laenger
-% Zeit bis sie sich wieder auf den vorgegebenen Wert einfinden.
+% Das lineare System hat mehr Ueberschwingen (7%) als das nicht lineare 
+% System (5%) und schwingt mehr nach. Beide Systeme brauchen aber eine 
+% laengere Zeit bis sie sich wieder auf den vorgegebenen Wert einfinden.
 % Die Anstiegszeit wird eingehalten.
 
 % Sprungantwort Stoersprung:
