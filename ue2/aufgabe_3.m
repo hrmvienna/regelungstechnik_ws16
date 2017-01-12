@@ -49,7 +49,7 @@ ct = [0 0 1];
 % Die Ruhelagen des reduzierten Systems sind gleich dem des vollstaendigen
 % Systems.
 
-% Die Näherung der singulären Strörungstheorie für i_GSM stellt genau den
+% Die Naeherung der singulaeren Stroerungstheorie fuer i_GSM stellt genau den
 % Zusammenhang zwischen der Stromgleichung und den anderen drei
 % Zustandsgleichungen dar. Deshalb ändert sich beim Gleichungssystem nichts, 
 % weil die Stromgleichung in den anderen Zustandgleichungen einfließt und 
