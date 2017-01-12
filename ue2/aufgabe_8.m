@@ -77,7 +77,7 @@ t_rg = T*exp((acos(xi))/(tan(acos(xi))))
 Ta_min = t_rg/10
 Ta_max = t_rg/4
 
-Ta = t_rg/40 % gewählt
+Ta = 0.15 % gewählt
 
 
 %% Regler im q Bereich
@@ -85,7 +85,8 @@ Ta = t_rg/40 % gewählt
 Gz = c2d(Gs, Ta, 'zoh');
 Gq = d2c(Gz, 'tustin');
 
-Omega_c = 1.2/t_r;
+Omega_c = omega_c
+%Omega_c = 1.2/t_r;
 phi_soll = 70 - ue;
 
 Rq_1 = tf([1],[1,0]);
@@ -143,13 +144,14 @@ Lz2 = Gz*Rz2;
 
 Try1 = feedback(Lz1, 1);
 Try2 = feedback(Lz2, 1);
+Try3 = feedback(Gs*R, 1);
 
 figure
-step(Try1, Try2)
+step(Try1, Try2, Try3)
 % Ueberschwingung einzeichnen
 line([0, 10], [1.10, 1.10], 'Color', 'r')
 grid on
-legend ('Try1', 'Try2')
-title('Abtastzeit = 0.0317s')
+legend ('Try1', 'Try2', 'Try(s)')
+title('Abtastzeit = 0.0634s')
 
 stepinfo(Try1)
