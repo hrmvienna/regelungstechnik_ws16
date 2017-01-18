@@ -31,4 +31,10 @@ end
 
 %% Aufgabe 3.1.2: diskreter Zustandsregler
 
-% TODO
+syms delta_phi_GSMP delta_w_GSM delta_w_P delta_uk delta_rk
+
+delta_x_red = [delta_phi_GSMP delta_w_GSM delta_w_P].';
+
+% Polvorgabe
+P = [1, 2, 3];
+kt = acker(phi, gamma, P)
