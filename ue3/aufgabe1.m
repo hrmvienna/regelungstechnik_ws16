@@ -47,11 +47,10 @@ dxk2 = phi_g*xk + gamma*g*rk;
 % Eigenwerte der Dynamikmatrix
 eigen_phi = eig(phi);
 
-% Polvorgabe, 1/2 wurde gewaehlt, da es kleiner als die Eigenwerte von Phi
+% Polvorgabe, -1/2 wurde gewaehlt, da es kleiner als die Eigenwerte von Phi
 % ist, d.h. schnellere Dynamik der gewaehlten Pole als von Phi
 lambda0 = -1/2;
-%P = [exp(Ta*lambda0), exp(Ta*lambda0), exp(Ta*lambda0)];
-P = [-0.5, -0.5, -0.5];
+P = [lambda0, lambda0, lambda0];
 kt = -acker(phi, gamma, P) % Vorzeichen, Hinweis in Beispiel 8.1
 kt1 = kt(1); kt2 = kt(2); kt3 = kt(3);
 
