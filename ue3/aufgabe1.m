@@ -42,7 +42,7 @@ eigen_A = eig(A);
 % eigen_A = [ -0.7225 +- 8.6575i, -0.7258]
 
 % Polvorgabe, gewuenschte Pole des geschlossenen Kreises im Zeitkontinuierlichen
-lambda0 = -3.5;
+lambda0 = -4;
 P = [lambda0, lambda0, lambda0];
 % Gewuenschte Pole des geschlossenen Kreises für das Abtastsystem
 Pd = exp(P*Ta);
@@ -89,7 +89,7 @@ step(T_ry)
 % Ueberschwingung einzeichnen
 line([0, 7], [1, 1], 'Color', 'r')
 % tr so halbwegs einzeichnen, wie Abbildung 5.2.
-a = 0.76; % Wendepunkt, vom Plot abgelesen (anklicken)
+a = 0.68; % Wendepunkt, vom Plot abgelesen (anklicken)
 line([a-t_r/2, a+t_r/2], [0, 1], 'Color','k')
 line([a-t_r/2, a-t_r/2], [0, 1], 'Color','g')
 line([a+t_r/2, a+t_r/2], [0, 1], 'Color','g')
