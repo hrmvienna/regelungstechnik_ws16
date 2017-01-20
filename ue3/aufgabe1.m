@@ -12,13 +12,13 @@ bu = double([0; 12500/713; 0]);
 bd = double([0; 0; -400/13]);
 ct = [0 0 1];
 d = 0;
-sys = ss(A,[bu, bd], ct, d)
+sys = ss(A,bu, ct, d)
 
 % System abtasten
 dsys = c2d(sys, Ta)
 
 phi = dsys.A;
-gamma = dsys.B(:,1); % Spalte 1
+gamma = dsys.B; % Spalte 1
 
 % Erreichbarkeitsmatrix
 R = ctrb(phi, gamma);
@@ -34,25 +34,24 @@ end
 syms phi_GSMP w_GSM w_P uk rk g
 kt = sym('kt', [1 3]);
 
-xk = [phi_GSMP w_GSM w_P].';
-uk = kt*xk + g*rk;
-
-dxk = phi*xk + gamma*uk;
-yk = ct*xk + d*uk;
-
 % Ueberpruefung, dxk == dxk2, Skript Kapitel 8.1
 phi_g = phi + gamma*kt;
-dxk2 = phi_g*xk + gamma*g*rk;
 
 % Eigenwerte der Dynamikmatrix
-eigen_phi = eig(phi);
+eigen_A = eig(A);
+% eigen_A = [ -0.7225 +- 8.6575i, -0.7258]
 
-% Polvorgabe, -1/2 wurde gewaehlt, da es kleiner als die Eigenwerte von Phi
-% ist, d.h. schnellere Dynamik der gewaehlten Pole als von Phi
-lambda0 = -1/2;
+% Polvorgabe, gewuenschte Pole des geschlossenen Kreises im Zeitkontinuierlichen
+lambda0 = -1;
 P = [lambda0, lambda0, lambda0];
-kt = -acker(phi, gamma, P) % Vorzeichen, Hinweis in Beispiel 8.1
+% Gewuenschte Pole des geschlossenen Kreises für das Abtastsystem
+Pd = exp(P*Ta);
+
+kt = -acker(phi, gamma, Pd) % Vorzeichen, Hinweis in Beispiel 8.1
 kt1 = kt(1); kt2 = kt(2); kt3 = kt(3);
+
+%Test
+eig(phi+gamma*kt)
 
 % Gleichung (8.39)
 g = 1 / ((ct + d*kt)*inv(eye(3) - phi - gamma*kt)*gamma + d)
