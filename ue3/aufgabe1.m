@@ -42,7 +42,7 @@ eigen_A = eig(A);
 % eigen_A = [ -0.7225 +- 8.6575i, -0.7258]
 
 % Polvorgabe, gewuenschte Pole des geschlossenen Kreises im Zeitkontinuierlichen
-lambda0 = -1;
+lambda0 = -10;
 P = [lambda0, lambda0, lambda0];
 % Gewuenschte Pole des geschlossenen Kreises für das Abtastsystem
 Pd = exp(P*Ta);
@@ -77,53 +77,4 @@ u_e = 0;
 u_gsm_min = 0;
 u_gsm_max = 12;
 
-%% B: Kenngroessen berechnen: Durchtrittsfrequenz und Phasenreserve
-
-omega_c = 1.2/t_r
-phi_soll = 70 - u_e
-
-% Da e_inf = 0 auf die Eingangsfolge (r^k) = (1^k), wird mind. ein
-% Integrator benoetigt.
-
-%% C: Reglerentwurf: zuerste Phase und Verstaerkung der bekannten Terme 
-
-Gq = d2c(Gz, 'tustin');
-
-% Regler aus den bekannten Termen
-Rq_1 = tf([1], [1 0]);
-Lq_1 = minreal(Rq_1*Gq);
-
-% Phasenreserve bei Lz_1(I*omega_c)
-[re_Lq_1 im_Lq_1] = nyquist(Lq_1, omega_c);
-phi_Lq_1 = atan (im_Lq_1/re_Lq_1) * 180/pi; % phi = arctan(Im/re)[rad], [degree] = [rad]*180/pi,
-
-phi_dif = phi_soll - phi_Lq_1;
-
-% Phase muss um 41.9121 gehoben werden
-% mithilfe des Terms (1 + s*T_I)
-% arctan(omega_c * T_I) = phi_dif * pi/180
-T_I = tan(phi_dif * pi /180)/omega_c;
-Rq_2 = tf([T_I 1], 1);
-Lq_2 = minreal(Rq_2*Lq_1);
-
-% Phasenreserve bei Lz_1(I*omega_c)
-[re_Lq_2 im_Lq_2] = nyquist(Lq_2, omega_c);
-phi_Lq_2 = atan (im_Lq_2/re_Lq_2) * 180/pi; % phi = arctan(Im/re)[rad], [degree] = [rad]*180/pi,
-
-% Betrag korregieren, mit dem Verstaerkungsfaktor
-abs_Lq_2 = sqrt(re_Lq_2^2 + im_Lq_2^2); % V_R*abs(L_3(I*omega_c) = 1
-
-V_R = 1/(abs_Lq_2);
-Lq_3 = minreal(V_R*Lq_2);
-
-% Gesamtregler
-Rq = Rq_1*Rq_2*V_R;
-Rz = c2d(Rq, Ta, 'tustin');
-
-Lz = Rz*Gz;
-Lz2 = c2d(Lq_3, Ta, 'tustin');
-
-% residue von Rz_PI
-[I,p1,P] = residue(cell2mat(Rz.Numerator), cell2mat(Rz.Denominator));
-
-
+% TODO: Anstigszeit kann durch die Volvorgabe beeinflusst werden
