@@ -61,7 +61,7 @@ dsys2 = c2d(sys2, Ta)
 phi2 = dsys2.A;
 gamma2 = dsys2.B;
 
-% Zustandsregler für das linearisierte System berechnen
+% Zustandsregler fuer das linearisierte System berechnen
 
 % Polvorgabe, gewuenschte Pole des geschlossenen Kreises im Zeitkontinuierlichen
 lambda0 = -4;
