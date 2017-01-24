@@ -1,5 +1,11 @@
 clear all; close all; clc
 
+
+% aus Aufgabe 2.:5:
+
+Ta = 10e-3
+Ta2 = 50e-3
+
 %% Aufgabe 3.4: Stoerverhalten im Vergleich
 
 % aus Aufgabe 3.2:
@@ -10,19 +16,6 @@ bd = double([0; 0; -400/13]);
 ct = [0 0 1]; d = 0;
 sys = ss(A,bu, ct, d);
 dsys = c2d(sys, Ta);
-% Parameter für PI Regler als Matlab Function
-parZR.Phi      = dsys.a;
-parZR.Gamma    = dsys.b;
-parZR.C        = dsys.c;
-parZR.D        = dsys.d;
-parZR.kI = kI;
-parZR.kP = kP;
-parZR.kx = kx;
-
-% aus Aufgabe 2.:5:
-
-Ta = 10e-3
-Ta2 = 50e-3
 
 % Kompensationsregler mit Ta=10ms aus Aufgabe 2.5
 
@@ -43,6 +36,15 @@ R_komp2 = tf(R_komp2_num, R_komp2_den, Ta2);
 kI = 0.0065;
 kP = 0.1488;
 kx = [-0.6050   -0.7335    0.3827];
+
+% Parameter fuer PI Regler als Matlab Function
+parZR.Phi      = dsys.a;
+parZR.Gamma    = dsys.b;
+parZR.C        = dsys.c;
+parZR.D        = dsys.d;
+parZR.kI = kI;
+parZR.kP = kP;
+parZR.kx = kx;
 
 %% Parameter fuer NLIN - System aus Aufgabe4
 
