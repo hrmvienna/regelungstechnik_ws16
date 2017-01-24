@@ -2,10 +2,16 @@ clear all; close all; clc
 
 %% Theoriefrage
 
-% Warum hat der Regler beim nichtlinearen System eine andere
-% Reglerabweichung als beim linearen System?
+% TODO: Erfüllt der Regler die Anforderungen?
 
-% TODO: weils nichtlinear ist...
+% Warum hat der Regler beim nichtlinearen System eine andere
+% Reglerabweichung als beim linearen System? 
+
+% Auch bei der Simulation 2.6 erkennt man eine bleibende Regelabweichung
+% fuer die beiden linearisierten Regler. 
+
+% Der lineare Regler verhält sich auf einer nicht-linearen Strecke
+% nicht ideal und es bleibt eine Regelabweichung. warumm?
 
 %% Aufgabe 3.2: Implementierung des Zustandsreglers aus Aufgabe 3.1
 
