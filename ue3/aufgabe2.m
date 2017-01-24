@@ -44,33 +44,4 @@ w_P_r = x_R(4);
 u_GSM_r = 5.6;
 M_ext_r = 0;
 
-% Nichtlineares System linearisieren
-A2 = double(subs([ -R_GSM/L_GSM,   0,  -k_GSM/L_GSM,  0;...
-  0,       0,      1,      -1;...
-  k_GSM/J_GSM, -c_GSMP/J_GSM, -(d_GSMP + d_vGSM)/J_GSM, d_GSMP/J_GSM;...
-  0,    c_GSMP/J_P,  d_GSMP/J_P, -(d_GSMP + d_vP + 2*d_qP*w_P_r)/J_P], paralist_1, paralist_2))
-
-bu2 = double(subs([1/L_GSM;0;0;0], paralist_1, paralist_2))
-bd2 = double(subs([0;0;0;-1/J_P], paralist_1, paralist_2))
-ct2 = double(subs([0 0 0 1], paralist_1, paralist_2))
-d2 = 0;
-
-% Abtastsystem
-sys2 = ss(A2, bu2, ct2, d2)
-dsys2 = c2d(sys2, Ta)
-phi2 = dsys2.A;
-gamma2 = dsys2.B;
-
-% Zustandsregler fuer das linearisierte System berechnen
-
-% Polvorgabe, gewuenschte Pole des geschlossenen Kreises im Zeitkontinuierlichen
-lambda0 = -4;
-P = [lambda0, lambda0, lambda0, lambda0];
-Pd = exp(P*Ta);
-
-kt2 = -acker(phi2, gamma2, Pd) % Vorzeichen, Hinweis in Beispiel 8.1
-% Gleichung (8.39)
-g2 = 1 / ((ct2 + d2*kt2)*inv(eye(4) - phi2 - gamma2*kt2)*gamma2 + d2)
-
-
 f_M_v = subs(f_M, paralist_1, paralist_2)
