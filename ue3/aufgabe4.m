@@ -1,8 +1,6 @@
 clear all; close all; clc
 
-
-% aus Aufgabe 2.:5:
-
+% aus Aufgabe 2.5:
 Ta = 10e-3
 Ta2 = 50e-3
 
