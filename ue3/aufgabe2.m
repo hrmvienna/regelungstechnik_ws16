@@ -2,16 +2,12 @@ clear all; close all; clc
 
 %% Theoriefrage
 
-% TODO: Erfüllt der Regler die Anforderungen?
-
-% Warum hat der Regler beim nichtlinearen System eine andere
-% Reglerabweichung als beim linearen System? 
-
-% Auch bei der Simulation 2.6 erkennt man eine bleibende Regelabweichung
-% fuer die beiden linearisierten Regler. 
-
-% Der lineare Regler verhält sich auf einer nicht-linearen Strecke
-% nicht ideal und es bleibt eine Regelabweichung. warumm?
+% 3.2.1: Die Stellgroessenbeschraenkung wird eingehalten. Die Anstiegszeit
+% wird bei beiden Systemen eingehalten.
+% Im gegensatz zum linearen System, hat das nichlineare eine bleibende
+% Reglerabweichung. Das kann darauf zurueckgefuehrt werden, dass die
+% rueckgefuehrte Ausgangsgroesse omega_P im System nichtlinear einfliesst
+% (omega_P^2).
 
 %% Aufgabe 3.2: Implementierung des Zustandsreglers aus Aufgabe 3.1
 
@@ -27,8 +23,8 @@ ct = [0 0 1];
 d = 0;
 sys = ss(A,bu, ct, d)
 
-g = 0.165707650406087;
-kt = [1.894974536721893,-0.520134683695267,0.478777536929102];
+g = 0.191256619814921;
+kt = [1.642044873883318 -0.552061611287633 0.488425190564502];
 
 %% Zustandsregler am nichtlinearen Model aus Aufgabe 2.2
 

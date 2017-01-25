@@ -1,5 +1,11 @@
 clear all; close all; clc
 
+%% Theoriefrage:
+
+% Die Pole wurden bei -4.2 gewählt, da somit die geforderte Anstiegszeit
+% von 1s erreicht werden kann. Die bleibende Reglerabweichung besteht, da
+% kein Integralterm im Regler vorhanden ist (siehe Kapitel 5).
+
 %% Aufgabe 3.1.1: Zustandsreglerentwurf
 
 % Parameter
@@ -42,7 +48,7 @@ eigen_A = eig(A);
 % eigen_A = [ -0.7225 +- 8.6575i, -0.7258]
 
 % Polvorgabe, gewuenschte Pole des geschlossenen Kreises im Zeitkontinuierlichen
-lambda0 = -4;
+lambda0 = -4.2;
 P = [lambda0, lambda0, lambda0];
 % Gewuenschte Pole des geschlossenen Kreises für das Abtastsystem
 Pd = exp(P*Ta);
@@ -77,8 +83,6 @@ u_e = 0;
 u_gsm_min = 0;
 u_gsm_max = 12;
 
-% TODO: Anstigszeit kann durch die Polvorgabe beeinflusst werden
-
 %% E: Sprungantwort des geschlossenen Kreises
 
 % Geschlossener Kreis
@@ -89,12 +93,14 @@ step(T_ry)
 % Ueberschwingung einzeichnen
 line([0, 7], [1, 1], 'Color', 'r')
 % tr so halbwegs einzeichnen, wie Abbildung 5.2.
-a = 0.68; % Wendepunkt, vom Plot abgelesen (anklicken)
+a = 0.65; % Wendepunkt, vom Plot abgelesen (anklicken)
 line([a-t_r/2, a+t_r/2], [0, 1], 'Color','k')
 line([a-t_r/2, a-t_r/2], [0, 1], 'Color','g')
 line([a+t_r/2, a+t_r/2], [0, 1], 'Color','g')
-title('Sprungantwort des geschlossenen Kreises L4(s)')
+title('Sprungantwort des geschlossenen Kreises')
 legend('Try', 'ue', 'tr')
 grid on
 
-stepinfo(T_ry)
+T_ry_info = stepinfo(T_ry);
+sprintf('Anstiegszeit: %f', T_ry_info.RiseTime)
+sprintf('Bleibende Reglerabweichung (T_ry): %f %%', (1 - T_ry_info.SettlingMax)*100)

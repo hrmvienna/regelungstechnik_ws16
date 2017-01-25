@@ -1,5 +1,17 @@
 clear all; close all; clc
 
+%% Theoriefragen
+
+% Anforderungen hinsichtlich der Erreichbarkeit:
+% alle Eigenwerte != 1 und keine Nullstelle bei 1, somit folgt aus der
+% erreichbarkeit von (Phi, Gamma) die erreichbarkeit von (Phi_I, Gamma_I).
+% Satz 8.4; Somit ist auch noch kein Integrator enthalten.
+
+% Anforderungen an den Regelkreis:
+% Das nichtlineare System hat eine bleibende Reglerabweichun von 5*10^(-9),
+% und die Anstiegszeit wird eingehalten. Das lineare System haelt die
+% Anforderungen ein.
+
 %% Aufgabe 3.3: Zeitdiskreter PI-Zustandsregler
 
 % Lin. red. Modell aus Aufgabe 2.3
@@ -16,9 +28,24 @@ dsys = c2d(sys, Ta);
 phi = dsys.A;
 gamma = dsys.B;
 
+% Eigenwerte der Dynamikmatrix Phi ueberpruefen
+eigen_phi = eig(phi)
+% Nullstellen der Uebertragungsfunktion ueberpruefe
+Gz = tf(dsys);
+zeros_gz = zero(Gz)
+
 %% PI-Zustandsregler - Skript Kapitel 8.2, (8.52)
 AI = [phi,[0,0,0]'; -ct, 1];
 bI = [gamma; 0];
+
+% Erreichbarkeitsmatrix
+R = ctrb(AI, bI);
+
+if rank(R) == 4
+   sprintf('System ist vollstaendig erreichbar')
+else
+    sprintf('System ist nicht vollstaendig erreichbar')
+end
 
 % Gewuenschte Pole des geschlossenen Kreises im Zeitkontinuierlichen
 lambda0 = -4; PI = [lambda0, lambda0, lambda0, lambda0];

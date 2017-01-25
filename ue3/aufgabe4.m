@@ -1,5 +1,26 @@
 clear all; close all; clc
 
+%% Theoriefragen
+
+% Fuehrungsverhalten:
+% Das Fuehrungsverhalten der Zustandsregler ist besser als das der
+% Kompensationsregler.
+% Die Kompensationsregler haben eine bleibede Reglerabweichung, im
+% Gegensatz zu den PI-Zustandsreglern. 
+% Die Anstiegszeit ist bei allen innerhalb der Anforderungen.
+% Stellgroessenbeschraenkung wird auch eingehalten.
+
+% Stoerverhalten:
+% Die Stoerung hat einen groesseren Einfluss bei den Kompensationsreglern,
+% sie verursacht eine groessere Auslenkung als bei den PI-Zustandsreglern. 
+% Die PI-Zustandsregler reagieren viel schneller auf die Stoerung, bzw.
+% korrigieren diese viel schneller. Die Kompensationsregler sind traeger
+% bei der Unterdrueckung der Stoerung.
+% Der Verlauf der Stellgroesse ist beim Kompensationsregler gemaechlicher,
+% somit wird weniger Dynamik vom Aktor benoetigt.
+
+%% Abtastzeiten
+ 
 % aus Aufgabe 2.5:
 Ta = 10e-3
 Ta2 = 50e-3
