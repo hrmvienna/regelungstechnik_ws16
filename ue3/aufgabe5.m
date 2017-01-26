@@ -1,6 +1,7 @@
 clear all; close all; clc
 
 %% Aufgabe 3.5
+% save('regler14.mat', 'parKompReg', 'parZR')
 
 Ta = 0.01;
 
