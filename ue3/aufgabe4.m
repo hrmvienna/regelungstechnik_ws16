@@ -65,12 +65,9 @@ kP = 0.1488;
 kx = [-0.6050   -0.7335    0.3827];
 
 % Parameter fuer PI Regler als Matlab Function
-parZR.Phi      = dsys.a;
-parZR.Gamma    = dsys.b;
-parZR.C        = dsys.c;
-parZR.D        = dsys.d;
+parZR.c_z      = dsys.c;
 parZR.kI = kI;
-parZR.kP = kP;
+parZR.kp = kP;
 parZR.kx = kx;
 
 %% Parameter fuer NLIN - System aus Aufgabe4

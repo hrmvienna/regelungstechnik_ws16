@@ -63,15 +63,11 @@ kP = 1/(ct*inv(eye(3)-phi)*gamma);
 kx = kP*ct+ke(1:3);
 
 %% Parameter für PI Regler als Matlab Function
-parZR.Phi      = dsys.a;
-parZR.Gamma    = dsys.b;
-parZR.C        = dsys.c;
-parZR.D        = dsys.d;
+parZR.c_z      = dsys.c;
 
 parZR.kI = kI;
-parZR.kP = kP;
+parZR.kp = kP;
 parZR.kx = kx;
-
 
 %% Parameter für NLIN - System aus Aufgabe4
 
