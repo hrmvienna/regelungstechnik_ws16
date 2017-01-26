@@ -38,6 +38,14 @@ dsys = c2d(sys, Ta);
 
 % Kompensationsregler mit Ta=10ms aus Aufgabe 2.5
 
+% fuer lambda = -4.2
+
+parKompReg.I = 0.0079;
+parKompReg.P = 0.1488;
+parKompReg.R_kompz = [-1.106292297221217,-0.775222936563828,0.330084795588492];
+
+% fuer lambda = -4
+
 R_komp_num = [0.154978970147333,-0.460423308714992,0.457094921736261,-0.151642123722946];
 R_komp_den = [1,-2.86473429951691,2.73404280146561,-0.869308501948704];
 
